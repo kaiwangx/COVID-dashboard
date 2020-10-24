@@ -5,6 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { VictoryBar } from 'victory-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Parse from 'parse/react-native.js'
 
 function HomeScreen() {
   const data = [
@@ -39,6 +41,26 @@ function MapScreen() {
 const Tab = createBottomTabNavigator()
 
 export default function App() {
+  Parse.setAsyncStorage(AsyncStorage)
+  Parse.initialize("vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO","fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+  Parse.serverURL = 'https://parseapi.back4app.com/'
+
+  const MyFirstClass = Parse.Object.extend("BryanTesting");
+  const myFirstClass = new MyFirstClass();
+
+  myFirstClass.set("name", "I'm able to save objects!");
+  myFirstClass.set("name", "another row")
+  myFirstClass.save();
+  /*
+  .then((object) => {
+    // Success
+    alert('New object created with objectId: ' + object.id);
+  }, (error) => {
+    // Save fails
+    alert('Failed to create new object, with error code: ' + error.message);
+  });
+  */
+
   return (
     <NavigationContainer>
       <Tab.Navigator
