@@ -1,10 +1,28 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { VictoryBar } from 'victory-native'
+import { Notifications } from 'react-native-notifications';
+
+class MyComponent extends Component {
+  constructor(props) {
+    super(props);
+    Notifications.registerRemoteNotifications();
+
+    Notifications.events().registerNotificationReceivedForeground((notification: Notification, completion) => {
+      console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
+      completion({alert: false, sound: false, badge: false});
+    });
+
+    Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
+      console.log(`Notification opened: ${notification.payload}`);
+      completion();
+    });
+  }
+}
 
 function HomeScreen() {
   const data = [
@@ -39,6 +57,16 @@ function MapScreen() {
 const Tab = createBottomTabNavigator()
 
 export default function App() {
+  // Request permissions on iOS, refresh token on Android
+  Notifications.registerRemoteNotifications();
+
+  Notifications.events().registerRemoteNotificationsRegistered((event=Registered) => {
+      // TODO: Send the token to my server so it could send back push notifications...
+      console.log("Device Token Received", event.deviceToken);
+  });
+  Notifications.events().registerRemoteNotificationsRegistrationFailed((event=RegistrationError) => {
+      console.error(event);
+  });
   return (
     <NavigationContainer>
       <Tab.Navigator
