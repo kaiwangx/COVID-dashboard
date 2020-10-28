@@ -8,6 +8,16 @@ import Signup from './Signup'
 
 const SettingStack = createStackNavigator()
 
+const functionList = [_setNotification, _selfReport]
+
+function _setNotification() {
+  alert('notificaiton')
+}
+
+function _selfReport() {
+  alert('selfReport')
+}
+
 function settingPage() {
   const navigation = useNavigation()
   return (
@@ -19,8 +29,11 @@ function settingPage() {
       {/* <Divider style={{ backgroundColor: 'black' }} /> */}
       <View>
         {user_list.map((l, i) => (
-          <TouchableOpacity onPress={() => navigation.navigate('Signin')}>
-            <ListItem key={i} bottomDivider>
+          <TouchableOpacity
+            key={i}
+            onPress={() => navigation.navigate('Signin')}
+          >
+            <ListItem bottomDivider>
               <Avatar source={{ uri: l.avatar_url }} />
               <ListItem.Content>
                 <ListItem.Title>{l.name}</ListItem.Title>
@@ -31,14 +44,26 @@ function settingPage() {
         ))}
       </View>
       <View>
-        {setting_list.map((item, i) => (
-          <ListItem key={i} bottomDivider>
-            <Icon name={item.icon} />
+        {/* <TouchableOpacity onPress={_setNotification}>
+          <ListItem key="1" bottomDivider>
+            <Icon name="av-timer" />
             <ListItem.Content>
-              <ListItem.Title>{item.title}</ListItem.Title>
+              <ListItem.Title>Notification</ListItem.Title>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>
+        </TouchableOpacity> */}
+
+        {setting_list.map((item, i) => (
+          <TouchableOpacity key={i} onPress={functionList[i]}>
+            <ListItem bottomDivider>
+              <Icon name={item.icon} />
+              <ListItem.Content>
+                <ListItem.Title>{item.title}</ListItem.Title>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
