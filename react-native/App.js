@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-// import { VictoryBar } from 'victory-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
 import HomeScreen from './component/HomeScreen'
@@ -14,6 +13,7 @@ import SettingsScreen from './component/SettingsScreen'
 const Tab = createBottomTabNavigator()
 
 export default function App() {
+  /*
   Parse.setAsyncStorage(AsyncStorage)
   Parse.initialize(
     'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
@@ -27,6 +27,8 @@ export default function App() {
   myFirstClass.set('name', "I'm able to save objects!")
   myFirstClass.set('name', 'another row')
   myFirstClass.save()
+  */
+  const url = "https://api.covidtracking.com/v1/states/daily.json";
 
   function homeTabNavigation() {
     return (
