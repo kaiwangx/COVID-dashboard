@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, View, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -61,6 +61,9 @@ export default function App() {
   });
   */
 
+  const covid_tracking_url = "https://api.covidtracking.com/v1/states/daily.json"
+  s = useState(fetch(covid_tracking_url, {method: "GET"})
+			.then(response => response.json()));
   return (
     <NavigationContainer>
       <Tab.Navigator
