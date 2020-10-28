@@ -8,6 +8,9 @@ export default function Signin() {
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
+
+  function login(username, password) {}
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -38,10 +41,7 @@ export default function Signin() {
       </View>
 
       <View style={styles.loginButton}>
-        <Button
-          title="Sign In"
-          onPress={() => checkUsernamePassword(username, password)}
-        />
+        <Button title="Sign In" onPress={() => login(username, password)} />
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text
@@ -53,11 +53,6 @@ export default function Signin() {
       </View>
     </View>
   )
-}
-
-function checkUsernamePassword(username, password) {
-  console.log(username)
-  console.log(password)
 }
 
 const styles = StyleSheet.create({

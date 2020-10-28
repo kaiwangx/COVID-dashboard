@@ -9,17 +9,7 @@ export default function Signup() {
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
 
-  function register(username, password) {
-    console.log(JSON.stringify({ userName: username, password: password }))
-    fetch('https://mysqlcs639.cs.wisc.edu/users', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userName: username, password: password }),
-    })
-  }
+  function register(username, password) {}
 
   return (
     <View style={styles.container}>
