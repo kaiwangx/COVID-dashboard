@@ -10,8 +10,6 @@ import Parse from 'parse/react-native.js'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
-import Signin from './component/Signin'
-import Signup from './component/Signup'
 
 const Tab = createBottomTabNavigator()
 

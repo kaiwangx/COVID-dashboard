@@ -47,7 +47,10 @@ export default function Signup() {
         />
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.text_link} onPress={() => navigation.goBack()}>
+        <Text
+          style={styles.text_link}
+          onPress={() => navigation.navigate('Signin')}
+        >
           Have an account? Sign in here
         </Text>
       </View>

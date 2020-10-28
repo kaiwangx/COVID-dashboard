@@ -46,7 +46,7 @@ export default function Signin() {
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text
           style={styles.text_link}
-          onPress={() => navigation.navigate('Sign up')}
+          onPress={() => navigation.navigate('Signup')}
         >
           Create an account
         </Text>
