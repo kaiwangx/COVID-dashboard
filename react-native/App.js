@@ -1,68 +1,83 @@
-import React from 'react'
+<<<<<<< HEAD
+import React, { Component } from 'react'
+=======
+import React, { useState } from 'react'
+>>>>>>> 5ed32f727589167548502db7f3604f56e616e19f
 import { Text, View, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+<<<<<<< HEAD
+<<<<<<< HEAD
 import { VictoryBar } from 'victory-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Notifications } from 'react-native-notifications';
+
+class MyComponent extends Component {
+  constructor(props) {
+    super(props);
+    Notifications.registerRemoteNotifications();
+
+    Notifications.events().registerNotificationReceivedForeground((notification: Notification, completion) => {
+      console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
+      completion({alert: false, sound: false, badge: false});
+    });
+
+    Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
+      console.log(`Notification opened: ${notification.payload}`);
+      completion();
+    });
+  }
+}
+=======
+// import { VictoryBar } from 'victory-native'
+=======
+>>>>>>> 5ed32f727589167548502db7f3604f56e616e19f
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
-
-function HomeScreen() {
-  const data = [
-    {date: "Oct 19", cases: 7525},
-    {date: "Oct 20", cases: 4721},
-    {date: "Oct 21", cases: 4327}
-  ];
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Dashboard!</Text>
-      <VictoryBar data={data} x="date" y="cases"/>
-    </View>
-  )
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  )
-}
-
-function MapScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Map!</Text>
-    </View>
-  )
-}
+import HomeScreen from './component/HomeScreen'
+import MapScreen from './component/MapScreen'
+import SettingsScreen from './component/SettingsScreen'
+>>>>>>> 1af7e3645ec0256c304edf117b0f9b90c51b5df7
 
 const Tab = createBottomTabNavigator()
 
 export default function App() {
+  /*
   Parse.setAsyncStorage(AsyncStorage)
-  Parse.initialize("vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO","fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+  Parse.initialize(
+    'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
+    'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
+  ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
   Parse.serverURL = 'https://parseapi.back4app.com/'
 
-  const MyFirstClass = Parse.Object.extend("BryanTesting");
-  const myFirstClass = new MyFirstClass();
+  const MyFirstClass = Parse.Object.extend('BryanTesting')
+  const myFirstClass = new MyFirstClass()
 
-  myFirstClass.set("name", "I'm able to save objects!");
-  myFirstClass.set("name", "another row")
-  myFirstClass.save();
-  /*
-  .then((object) => {
-    // Success
-    alert('New object created with objectId: ' + object.id);
-  }, (error) => {
-    // Save fails
-    alert('Failed to create new object, with error code: ' + error.message);
-  });
+  myFirstClass.set('name', "I'm able to save objects!")
+  myFirstClass.set('name', 'another row')
+  myFirstClass.save()
   */
+  const url = "https://api.covidtracking.com/v1/states/daily.json";
 
+<<<<<<< HEAD
+export default function App() {
+  // Request permissions on iOS, refresh token on Android
+  Notifications.registerRemoteNotifications();
+
+  Notifications.events().registerRemoteNotificationsRegistered((event=Registered) => {
+      // TODO: Send the token to my server so it could send back push notifications...
+      console.log("Device Token Received", event.deviceToken);
+  });
+  Notifications.events().registerRemoteNotificationsRegistrationFailed((event=RegistrationError) => {
+      console.error(event);
+  });
   return (
     <NavigationContainer>
+=======
+  function homeTabNavigation() {
+    return (
+>>>>>>> 1af7e3645ec0256c304edf117b0f9b90c51b5df7
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -98,6 +113,8 @@ export default function App() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
-  )
+    )
+  }
+
+  return <NavigationContainer>{homeTabNavigation()}</NavigationContainer>
 }
