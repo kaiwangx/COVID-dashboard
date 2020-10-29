@@ -1,44 +1,14 @@
-<<<<<<< HEAD
-import React, { Component } from 'react'
-=======
 import React, { useState } from 'react'
->>>>>>> 5ed32f727589167548502db7f3604f56e616e19f
 import { Text, View, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { VictoryBar } from 'victory-native'
-import { Notifications } from 'react-native-notifications';
-
-class MyComponent extends Component {
-  constructor(props) {
-    super(props);
-    Notifications.registerRemoteNotifications();
-
-    Notifications.events().registerNotificationReceivedForeground((notification: Notification, completion) => {
-      console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
-      completion({alert: false, sound: false, badge: false});
-    });
-
-    Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
-      console.log(`Notification opened: ${notification.payload}`);
-      completion();
-    });
-  }
-}
-=======
-// import { VictoryBar } from 'victory-native'
-=======
->>>>>>> 5ed32f727589167548502db7f3604f56e616e19f
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
->>>>>>> 1af7e3645ec0256c304edf117b0f9b90c51b5df7
 
 const Tab = createBottomTabNavigator()
 
@@ -60,24 +30,8 @@ export default function App() {
   */
   const url = "https://api.covidtracking.com/v1/states/daily.json";
 
-<<<<<<< HEAD
-export default function App() {
-  // Request permissions on iOS, refresh token on Android
-  Notifications.registerRemoteNotifications();
-
-  Notifications.events().registerRemoteNotificationsRegistered((event=Registered) => {
-      // TODO: Send the token to my server so it could send back push notifications...
-      console.log("Device Token Received", event.deviceToken);
-  });
-  Notifications.events().registerRemoteNotificationsRegistrationFailed((event=RegistrationError) => {
-      console.error(event);
-  });
-  return (
-    <NavigationContainer>
-=======
   function homeTabNavigation() {
     return (
->>>>>>> 1af7e3645ec0256c304edf117b0f9b90c51b5df7
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
