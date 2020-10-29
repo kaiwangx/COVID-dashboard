@@ -22,24 +22,25 @@ export default function Signup() {
     var user = new Parse.User()
     user.set('username', username)
     user.set('password', password)
-    user.set('email', 'email@example.com')
+    // user.set('email', 'email@example.com')
 
     // other fields can be set just like with Parse.Object
-    user.set('phone', '415-392-0202')
+    // user.set('phone', '415-392-0202')
 
     user
       .signUp()
       .then(function (user) {
-        console.log(
-          'User created successful with name: ' +
-            user.get('username') +
-            ' and email: ' +
-            user.get('email')
+        alert(
+          'User created successful with name: ' + user.get('username')
+          // +
+          // ' and email: ' +
+          // user.get('email')
         )
         navigation.navigate('Setting')
       })
       .catch(function (error) {
         console.log('Error: ' + error.code + ' ' + error.message)
+        alert(error.message)
       })
   }
 

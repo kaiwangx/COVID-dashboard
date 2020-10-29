@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { ListItem, Icon, Avatar, Divider, Header } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
@@ -6,90 +6,77 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Signin from './Signin'
 import Signup from './Signup'
 
-const SettingStack = createStackNavigator()
+export default function SettingsScreen() {
+  const SettingStack = createStackNavigator()
+  const functionList = [_setNotification, _selfReport]
+  const [username, onChangeUsename] = useState('Sign in')
 
-const functionList = [_setNotification, _selfReport]
+  const setting_list = [
+    {
+      title: 'Notification',
+      icon: 'av-timer',
+    },
+    {
+      title: 'Self Report',
+      icon: 'report',
+    },
+  ]
 
-function _setNotification() {
-  alert('notificaiton')
-}
+  function _setUsername(new_username) {
+    onChangeUsename(new_username)
+  }
 
-function _selfReport() {
-  alert('selfReport')
-}
+  function _setNotification() {
+    alert('notificaiton')
+  }
 
-function settingPage() {
-  const navigation = useNavigation()
-  return (
-    <View style={styles.container}>
-      {/* <Header
-        centerComponent={{ text: 'Settings', style: { color: '#fff' } }}
-      /> */}
-      {/* <Text style={styles.header}>Settings</Text> */}
-      {/* <Divider style={{ backgroundColor: 'black' }} /> */}
-      <View>
-        {user_list.map((l, i) => (
+  function _selfReport() {
+    alert('selfReport')
+  }
+
+  function settingPage() {
+    const navigation = useNavigation()
+    return (
+      <View style={styles.container}>
+        {/* <Header
+          centerComponent={{ text: 'Settings', style: { color: '#fff' } }}
+        /> */}
+        {/* <Text style={styles.header}>Settings</Text> */}
+        {/* <Divider style={{ backgroundColor: 'black' }} /> */}
+        <View>
           <TouchableOpacity
-            key={i}
+            key={'user avatar'}
             onPress={() => navigation.navigate('Signin')}
           >
             <ListItem bottomDivider>
-              <Avatar source={{ uri: l.avatar_url }} />
+              <Avatar
+                source={{
+                  uri:
+                    'https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png',
+                }}
+              />
               <ListItem.Content>
-                <ListItem.Title>{l.name}</ListItem.Title>
-                <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
+                <ListItem.Title>{username}</ListItem.Title>
               </ListItem.Content>
             </ListItem>
           </TouchableOpacity>
-        ))}
+        </View>
+        <View>
+          {setting_list.map((item, i) => (
+            <TouchableOpacity key={i} onPress={functionList[i]}>
+              <ListItem bottomDivider>
+                <Icon name={item.icon} />
+                <ListItem.Content>
+                  <ListItem.Title>{item.title}</ListItem.Title>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-      <View>
-        {/* <TouchableOpacity onPress={_setNotification}>
-          <ListItem key="1" bottomDivider>
-            <Icon name="av-timer" />
-            <ListItem.Content>
-              <ListItem.Title>Notification</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        </TouchableOpacity> */}
-
-        {setting_list.map((item, i) => (
-          <TouchableOpacity key={i} onPress={functionList[i]}>
-            <ListItem bottomDivider>
-              <Icon name={item.icon} />
-              <ListItem.Content>
-                <ListItem.Title>{item.title}</ListItem.Title>
-              </ListItem.Content>
-              <ListItem.Chevron />
-            </ListItem>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  )
-}
-
-const user_list = [
-  {
-    name: 'Sign In',
-    avatar_url:
-      'https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png',
-  },
-]
-
-const setting_list = [
-  {
-    title: 'Notification',
-    icon: 'av-timer',
-  },
-  {
-    title: 'Self Report',
-    icon: 'report',
-  },
-]
-
-export default function SettingsScreen() {
+    )
+  }
   return (
     <SettingStack.Navigator initialRouteName="Setting">
       <SettingStack.Screen name="Setting" component={settingPage} />

@@ -3,13 +3,32 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Parse from 'parse/react-native.js'
 
 export default function Signin() {
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
 
-  function login(username, password) {}
+  function login(username, password) {
+    Parse.setAsyncStorage(AsyncStorage)
+    Parse.initialize(
+      'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
+      'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
+    ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+    Parse.serverURL = 'https://parseapi.back4app.com/'
+
+    var user = Parse.User.logIn(username, password)
+      .then(function (user) {
+        alert('You have signed in successfully')
+        navigation.navigate('Setting')
+      })
+      .catch(function (error) {
+        console.log('Error: ' + error.code + ' ' + error.message)
+        alert(error.message)
+      })
+  }
 
   return (
     <View style={styles.container}>
