@@ -3,13 +3,45 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Parse from 'parse/react-native.js'
 
 export default function Signup() {
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
 
-  function register(username, password) {}
+  function register(username, password) {
+    // Create a new instance of the user class
+    Parse.setAsyncStorage(AsyncStorage)
+    Parse.initialize(
+      'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
+      'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
+    ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+    Parse.serverURL = 'https://parseapi.back4app.com/'
+    var user = new Parse.User()
+    user.set('username', username)
+    user.set('password', password)
+    user.set('email', 'email@example.com')
+
+    // other fields can be set just like with Parse.Object
+    user.set('phone', '415-392-0202')
+
+    user
+      .signUp()
+      .then(function (user) {
+        console.log(
+          'User created successful with name: ' +
+            user.get('username') +
+            ' and email: ' +
+            user.get('email')
+        )
+        navigation.navigate('Setting')
+      })
+      .catch(function (error) {
+        console.log('Error: ' + error.code + ' ' + error.message)
+      })
+  }
 
   return (
     <View style={styles.container}>
