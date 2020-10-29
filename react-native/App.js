@@ -20,10 +20,8 @@ export default function App() {
     'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
   ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
   Parse.serverURL = 'https://parseapi.back4app.com/'
-
   const MyFirstClass = Parse.Object.extend('BryanTesting')
   const myFirstClass = new MyFirstClass()
-
   myFirstClass.set('name', "I'm able to save objects!")
   myFirstClass.set('name', 'another row')
   myFirstClass.save()
