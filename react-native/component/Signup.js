@@ -5,11 +5,13 @@ import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
+import AuthContext from './AuthContext.js'
 
 export default function Signup() {
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
+  const { signIn } = React.useContext(AuthContext)
 
   function register(username, password) {
     // Create a new instance of the user class
@@ -42,6 +44,8 @@ export default function Signup() {
         console.log('Error: ' + error.code + ' ' + error.message)
         alert(error.message)
       })
+
+    // get token and call signIn
   }
 
   return (
