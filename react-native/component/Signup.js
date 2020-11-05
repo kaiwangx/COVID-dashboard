@@ -32,6 +32,7 @@ export default function Signup() {
     user
       .signUp()
       .then(function (user) {
+        signIn(user.get('sessionToken'), user.get('username'))
         alert(
           'User created successful with name: ' + user.get('username')
           // +

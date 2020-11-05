@@ -68,6 +68,8 @@ export default function App() {
       try {
         userToken = await AsyncStorage.getItem('userToken')
         userName = await AsyncStorage.getItem('userName')
+        // console.log(userToken)
+        // console.log(userName)
       } catch (e) {
         console.log(e)
       }

@@ -23,6 +23,7 @@ export default function Signin() {
 
     var user = Parse.User.logIn(username, password)
       .then(function (user) {
+        signIn(user.get('sessionToken'), user.get('username'))
         alert('You have signed in successfully')
         navigation.navigate('Setting')
       })
@@ -30,8 +31,6 @@ export default function Signin() {
         console.log('Error: ' + error.code + ' ' + error.message)
         alert(error.message)
       })
-
-    // get token and call signIn
   }
 
   return (
