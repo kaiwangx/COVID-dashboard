@@ -5,8 +5,10 @@ import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
+import AuthContext from './AuthContext.js'
 
 export default function Signin() {
+  const { signIn } = React.useContext(AuthContext)
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
@@ -21,6 +23,7 @@ export default function Signin() {
 
     var user = Parse.User.logIn(username, password)
       .then(function (user) {
+        signIn(user.get('sessionToken'), user.get('username'))
         alert('You have signed in successfully')
         navigation.navigate('Setting')
       })

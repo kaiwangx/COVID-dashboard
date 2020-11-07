@@ -9,6 +9,7 @@ import Parse from 'parse/react-native.js'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
+import AuthContext from './component/AuthContext.js'
 
 const Tab = createBottomTabNavigator()
 
@@ -26,9 +27,80 @@ export default function App() {
   myFirstClass.set('name', 'another row')
   myFirstClass.save()
   */
-  const url = "https://api.covidtracking.com/v1/states/daily.json";
 
-  function homeTabNavigation() {
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+            userName: action.name,
+          }
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignin: true,
+            userToken: action.token,
+            userName: action.name,
+          }
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignin: false,
+            userToken: null,
+          }
+      }
+    },
+    {
+      isLoading: true, // reserved for loading screen
+      isSignin: false,
+      userToken: null,
+      userName: null,
+    }
+  )
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let userToken, userName
+
+      try {
+        userToken = await AsyncStorage.getItem('userToken')
+        userName = await AsyncStorage.getItem('userName')
+        // console.log(userToken)
+        // console.log(userName)
+      } catch (e) {
+        console.log(e)
+      }
+      // console.log('app.js token: ' + userToken)
+      // After restoring token, we may need to validate it in production apps
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken, name: userName })
+    }
+
+    bootstrapAsync()
+  }, [])
+
+  const authContext = React.useMemo(
+    () => ({
+      signIn: async (_token, _name) => {
+        dispatch({ type: 'SIGN_IN', token: _token, name: _name })
+        // store token to asyncStorage
+        try {
+          await AsyncStorage.setItem('userToken', _token)
+          await AsyncStorage.setItem('userName', _name)
+        } catch (e) {
+          console.log(e)
+        }
+      },
+      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+    }),
+    []
+  )
+
+  function HomeTabNavigation() {
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -68,5 +140,11 @@ export default function App() {
     )
   }
 
-  return <NavigationContainer>{homeTabNavigation()}</NavigationContainer>
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <HomeTabNavigation />
+      </NavigationContainer>
+    </AuthContext.Provider>
+  )
 }

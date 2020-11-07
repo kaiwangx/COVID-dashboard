@@ -8,13 +8,17 @@ import Signup from './Signup'
 
 export default function SettingsScreen() {
   const SettingStack = createStackNavigator()
-  const functionList = [_setNotification, _selfReport]
+  const functionList = [_setNotification, _symptomChecker, _selfReport]
   const [username, onChangeUsename] = useState('Sign in')
 
   const setting_list = [
     {
       title: 'Notification',
       icon: 'av-timer',
+    },
+    {
+      title: 'Symptom Checker',
+      icon: 'playlist-add-check',
     },
     {
       title: 'Self Report',
@@ -30,8 +34,12 @@ export default function SettingsScreen() {
     alert('notificaiton')
   }
 
+  function _symptomChecker() {
+    alert('Symptom Checker')
+  }
+
   function _selfReport() {
-    alert('selfReport')
+    alert('Self Report')
   }
 
   function settingPage() {
