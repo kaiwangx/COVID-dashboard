@@ -45,8 +45,6 @@ export default function Signup() {
         console.log('Error: ' + error.code + ' ' + error.message)
         alert(error.message)
       })
-
-    // get token and call signIn
   }
 
   return (
