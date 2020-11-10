@@ -1,26 +1,5 @@
-import { AsyncStorage } from 'react-native';
-
-_retrieveData = async ( key ) => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-  } catch (error) {
-    console.log(error)
-  }
-};
-
-_storeData = async ( key, item ) => {
-  try {
-    await AsyncStorage.setItem(
-      key,
-      item
-    );
-  } catch (error) {
-    console.log(error)
-  }
-};
+import AsyncStorage from 'react-native';
+import { storeData, retrieveData } from "../functions/localStorage.js"
 
 /**
  * Assumes the array is in decreasing order
@@ -49,14 +28,14 @@ async function covidCasesByZipcode( zipCode, days = 7, rateOfChange = false ){
   days = days > 7 ? 7 : days;
   
   /// If the information is up to date
-  let lastUpdateStr = await _retrieveData("lastUpdate");
+  let lastUpdateStr = await retrieveData("lastUpdate");
   let currentDate = new Date().setHours(0,0,0,0);
   let lastUpdate = new Date(lastUpdateStr).setHours(0,0,0,0);
 
   if( currentDate == lastUpdate ){
 
       /// If the information is cached
-      let dataByState = await _retrieveData("CovidCasesByZipcode");
+      let dataByState = await retrieveData("CovidCasesByZipcode");
       
       data = JSON.parse(dataByState);
 
@@ -70,8 +49,8 @@ async function covidCasesByZipcode( zipCode, days = 7, rateOfChange = false ){
       let jsonArray = jsonData.counties[0].historicData
       
       /// Update cache
-      _storeData("lastUpdate", Date());
-      _storeData("CovidCasesByZipcode", JSON.stringify(jsonArray));
+      storeData("lastUpdate", Date());
+      storeData("CovidCasesByZipcode", JSON.stringify(jsonArray));
 
       data =  jsonArray;
     }
@@ -96,13 +75,13 @@ async function covidCasesByState( state, days = 31 ){
   let data;
 
   /// If the information is up to date
-  let lastUpdateStr = await _retrieveData("lastUpdate");
+  let lastUpdateStr = await retrieveData("lastUpdate");
   let currentDate = new Date().setHours(0,0,0,0);
   let lastUpdate = new Date(lastUpdateStr).setHours(0,0,0,0);
 
   if( currentDate == lastUpdate ){
 
-    let dataByState =  await _retrieveData("CovidCasesByState");
+    let dataByState =  await retrieveData("CovidCasesByState");
 
     data = JSON.parse(dataByState);
 
@@ -113,8 +92,8 @@ async function covidCasesByState( state, days = 31 ){
 
       let jsonData = await response.json();
 
-      _storeData("lastUpdate", Date());
-      _storeData("CovidCasesByState", JSON.stringify(jsonData));
+      storeData("lastUpdate", Date());
+      storeData("CovidCasesByState", JSON.stringify(jsonData));
   
       data = jsonData;
 
