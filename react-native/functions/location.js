@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
+
+import { storeData, retrieveData } from "../functions/localStorage.js"
+
 
 function getStateTwoDigitCode(stateFullName) {
   stateList = {
@@ -56,7 +60,7 @@ function getStateTwoDigitCode(stateFullName) {
     'Wyoming': 'WY'}
 
   return stateList[stateFullName];
-}  
+} 
 
 
 /**
@@ -75,6 +79,97 @@ async function getZipcode( key ) {
   let geocode = await Location.reverseGeocodeAsync(location.coords)
 
   return geocode[0][key];
+}
+
+/**
+ * Looks for location permission status
+ * 
+ * Returns false if permission is not given, the status otherwise
+ */
+async function getPermissionStatus() {
+  let { status } = await Location.requestPermissionsAsync();
+
+  if (status !== 'granted') {
+    console.error( error );
+    return false
+  }
+
+  return status
+}
+
+/**
+ * This function removes all location data that is older then two weeks
+ * 
+ * @param {JSON} jsonLocation - json object that uses date keys and arrays for locations
+ */
+function removeOldData( jsonLocation ){
+
+  let dateCutoff = new Date();
+  dateCutoff.setDate(dateCutoff.getDate() - 14)
+
+  Object.keys(jsonLocation).forEach(key => {
+  
+    if( key < dateCutoff.getTime() ){
+    
+      delete jsonLocation[key]
+    }
+  });
+ 
+  return jsonLocation;
+}
+
+/**
+ * If not existent create a location task to run in the background
+ */
+async function addLocationTask(){
+
+  // Permission check
+  let permission = await getPermissionStatus()
+
+  if( !permission ) {
+    return;
+  }
+
+  // Check that there is a task to manage this background activity
+  if( !(await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker")) ){
+
+    TaskManager.defineTask("BackgroundLocationTracker", ({ data: { locations }, error }) => {
+
+      if ( error ) {
+        return;
+      }
+      
+      let currentData = await retrieveData( "LocationData" )
+
+      // Remove old data and add new data
+      let currDate = new Date().getTime();
+      let freshData = removeOldData(currentData);
+      freshData[currDate] = locations;
+
+      storeData("LocationData", freshData)
+
+    })
+  }
+
+  // Start location Tracker if not already started
+  if( !(await Location.hasStartedLocationUpdatesAsync()) ){
+    let asyncLocationOptions = {
+      'accuracy' : 3,
+      'deferredUpdatesInterval' : 86400000,
+      'distanceInterval' : 200,
+    }
+
+    Location.startLocationUpdatesAsync("BackgroundLocationTracker", asyncLocationOptions)
+  }
+}
+
+/**
+ * Removes the location tracking task
+ */
+async function removeLocationTask(){
+  if( await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker") ){
+    Location.stopLocationUpdatesAsync("BackgroundLocationTracker")
+  }
 }
 
 export { getZipcode, getStateTwoDigitCode };

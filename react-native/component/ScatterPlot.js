@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryTheme } from 'victory-native'
+import { VictoryBar, VictoryChart, VictoryScatter, VictoryTheme } from 'victory-native'
 import { getZipcode } from '../functions/location.js';
 import { ButtonGroup } from 'react-native-elements'
 
@@ -26,7 +26,7 @@ const LineGraph = ( props ) => {
           {
             buttonIndices.map( index => {
               return(
-                <VictoryLine
+                <VictoryScatter
                   style={{
                     data: { stroke: colors[index] },
                     parent: { border: "1px solid #ccc"}

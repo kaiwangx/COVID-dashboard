@@ -96,15 +96,10 @@ async function covidCasesByState(state, days = 31) {
 
       let jsonData = await response.json()
 
-<<<<<<< HEAD
       storeData("lastUpdate", Date());
       storeData("CovidCasesByState", JSON.stringify(jsonData));
   
       data = jsonData;
-=======
-      _storeData('lastUpdate', Date())
-      _storeData('CovidCasesByState', JSON.stringify(jsonData))
->>>>>>> main
 
       data = jsonData
     } catch (error) {
