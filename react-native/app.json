@@ -18,6 +18,11 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "infoPlist" : {
+        "UIBackgroundModes" : [
+          "location"
+        ]
+      },  
       "config": {
         "googleMapsApiKey": "AIzaSyCeiw8-_LbPuan4ByGFPJGiHspHmZZD7-0"
       }
