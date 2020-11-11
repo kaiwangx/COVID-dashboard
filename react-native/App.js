@@ -103,6 +103,7 @@ export default function App() {
   function HomeTabNavigation() {
     return (
       <Tab.Navigator
+        initialRouteName="Home"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName
@@ -135,7 +136,16 @@ export default function App() {
       >
         <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+
+        <Tab.Screen name="Settings">
+          {(props) => (
+            <SettingsScreen
+              {...props}
+              userName={state.userName}
+              userToken={state.userToken}
+            />
+          )}
+        </Tab.Screen>
       </Tab.Navigator>
     )
   }

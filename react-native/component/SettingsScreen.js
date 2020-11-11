@@ -5,19 +5,26 @@ import { useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Signin from './Signin'
 import Signup from './Signup'
+import UserProfile from './UserProfile'
 
-export default function SettingsScreen() {
+export default function SettingsScreen(props) {
   const SettingStack = createStackNavigator()
-  const functionList = [_setNotification, _symptomChecker, _selfReport]
-  const [username, onChangeUsename] = useState('Sign in')
+  const functionList = [_symptomChecker, _selfReport]
+  const [userName, setUsername] = useState(null)
+  const [userToken, setUserToken] = useState('')
+  const navigation = useNavigation()
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = () => {
+      setUsername(props.userName)
+      setUserToken(props.userToken)
+    }
+    bootstrapAsync()
+  }, [])
 
   const setting_list = [
     {
-      title: 'Notification',
-      icon: 'av-timer',
-    },
-    {
-      title: 'Symptom Checker',
+      title: 'Preference',
       icon: 'playlist-add-check',
     },
     {
@@ -26,24 +33,27 @@ export default function SettingsScreen() {
     },
   ]
 
-  function _setUsername(new_username) {
-    onChangeUsename(new_username)
-  }
-
-  function _setNotification() {
-    alert('notificaiton')
-  }
-
   function _symptomChecker() {
-    alert('Symptom Checker')
+    alert('Set preference')
   }
 
   function _selfReport() {
     alert('Self Report')
   }
 
+  function getUsername() {
+    return userName == null ? 'Sign In' : 'Hello, ' + userName
+  }
+
+  function onpress_avatar() {
+    if (userName == null) {
+      navigation.navigate('Signin')
+    } else {
+      navigation.navigate('Profile')
+    }
+  }
+
   function settingPage() {
-    const navigation = useNavigation()
     return (
       <View style={styles.container}>
         {/* <Header
@@ -52,10 +62,7 @@ export default function SettingsScreen() {
         {/* <Text style={styles.header}>Settings</Text> */}
         {/* <Divider style={{ backgroundColor: 'black' }} /> */}
         <View>
-          <TouchableOpacity
-            key={'user avatar'}
-            onPress={() => navigation.navigate('Signin')}
-          >
+          <TouchableOpacity key={'user avatar'} onPress={onpress_avatar}>
             <ListItem bottomDivider>
               <Avatar
                 source={{
@@ -64,7 +71,7 @@ export default function SettingsScreen() {
                 }}
               />
               <ListItem.Content>
-                <ListItem.Title>{username}</ListItem.Title>
+                <ListItem.Title>{getUsername()}</ListItem.Title>
               </ListItem.Content>
             </ListItem>
           </TouchableOpacity>
@@ -90,6 +97,11 @@ export default function SettingsScreen() {
       <SettingStack.Screen name="Setting" component={settingPage} />
       <SettingStack.Screen name="Signin" component={Signin} />
       <SettingStack.Screen name="Signup" component={Signup} />
+      <SettingStack.Screen name="Profile">
+        {(props) => (
+          <UserProfile {...props} userName={userName} userToken={userToken} />
+        )}
+      </SettingStack.Screen>
     </SettingStack.Navigator>
   )
 }

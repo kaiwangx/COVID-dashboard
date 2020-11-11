@@ -36,7 +36,7 @@ export default function HomeScreen() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       {/* <Text>Dashboard!</Text> */}
       {/* <VictoryBar data={data} x="date" y="cases"/> */}
-      <BarChart state="WI" numDays={6} />
+      {/* <BarChart state="WI" numDays={6} /> */}
       <CountyLineGraph />
     </View>
   )
