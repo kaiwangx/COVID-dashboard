@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryTheme } from 'victory-native'
-import { getZipcode } from '../functions/location.js';
+import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native'
 import { ButtonGroup } from 'react-native-elements'
 
 const LineGraph = ( props ) => {
@@ -22,7 +21,11 @@ const LineGraph = ( props ) => {
       <View>
         <VictoryChart
           theme={VictoryTheme.material}
+          
         >
+          <VictoryAxis
+            fixLabelOverlap={true}
+          />
           {
             buttonIndices.map( index => {
               return(

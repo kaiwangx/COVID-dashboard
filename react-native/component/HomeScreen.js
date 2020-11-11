@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, FlatList, View, ScrollView } from 'react-native'
 import BarChart from './BarChart'
 import {
   covidCasesByZipcode,
   covidCasesByState,
 } from '../functions/dataCollection.js'
-import { getZipcode } from '../functions/location.js'
+import { weekOverMonthAverage } from "../functions/dataManipulation.js"
+
 import LineGraph from './LineGraph'
-import { VictoryLine } from 'victory-native'
+import ScatterPlot from "./ScatterPlot"
+import { VictoryLine, VictoryScatter } from 'victory-native'
+import Constants from 'expo-constants';
 
 const CountyLineGraph = () => {
   const [data, setData] = useState()
@@ -21,23 +24,112 @@ const CountyLineGraph = () => {
   }
 
   return (
-    <LineGraph
-      data={data}
-      x="date"
-      titles={['Death', 'Positive']}
-      keys={['deathCtROC', 'positiveCtROC']}
-      colors={['#000000', '#FF2D00']}
-    />
+    <View
+      width="100%"
+    >
+      <LineGraph
+        data={data.reverse()}
+        x="date"
+        titles={['Death', 'Positive']}
+        keys={['deathCtROC', 'positiveCtROC']}
+        colors={['#000000', '#FF2D00']}
+      />
+    </View>
+    
   )
 }
 
+const StateScatterPlot = () => {
+  const [data, setData] = useState()
+
+  useEffect(() => {
+    covidCasesByState('WI').then((r) => setData(r))
+  }, [])
+
+  if (!data) {
+    return <VictoryScatter />
+  }
+
+  return (
+    <View
+      width="100%"
+    >
+      <Text
+        style={{
+          fontSize: 60
+        }}
+      >
+        State COVID Cases
+      </Text>
+      <ScatterPlot
+        data={data.reverse()}
+        x="date"
+        titles={['Death', 'Positive']}
+        keys={['death', 'positive']}
+        colors={['#000000', '#FF2D00']}
+      /> 
+    </View>
+  ) 
+}
+
+const StateBreakDown = () => {
+  const [data, setData] = useState()
+
+  useEffect(() => {
+    covidCasesByState('WI').then((r) => setData(r))
+  }, [])
+
+  if (!data) {
+    return <View></View>;
+  }
+
+  let change = weekOverMonthAverage( data, "deathROC");
+  console.log(change)
+  let percentChange = (change * 100).toFixed(2)
+
+  return (
+    <View
+      width="100%"
+    >
+      <Text
+        style={{
+          fontSize: 60
+        }}
+      >
+        State Death Rate Change %{percentChange}
+      </Text>
+    </View>
+  ) 
+}
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+    justifyContent: 'center', 
+    alignItems: 'center',
+    borderWidth: 4,
+    borderColor: "#20232a",
+    borderRadius: 6,
+  },
+});
+
 export default function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* <Text>Dashboard!</Text> */}
-      {/* <VictoryBar data={data} x="date" y="cases"/> */}
-      <BarChart state="WI" numDays={6} />
-      <CountyLineGraph />
-    </View>
+    <>
+      <ScrollView>
+        <View style={styles.container}>
+          <BarChart state="WI" numDays={6} />
+        </View>
+        <View style={styles.container}>
+          <CountyLineGraph />
+        </View>
+        <View style={styles.container}>
+          <StateScatterPlot/>
+        </View>
+        <View style={styles.container}>
+          <StateBreakDown />
+        </View>
+      </ScrollView>
+    </>
   )
 }

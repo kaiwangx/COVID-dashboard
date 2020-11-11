@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
-import { VictoryBar, VictoryChart, VictoryScatter, VictoryTheme } from 'victory-native'
-import { getZipcode } from '../functions/location.js';
+import { VictoryChart, VictoryScatter, VictoryTheme, VictoryAxis } from 'victory-native'
 import { ButtonGroup } from 'react-native-elements'
 
-const LineGraph = ( props ) => {
+const ScatterPlot = ( props ) => {
 
     let data = props.data;
     let x = props.x;
@@ -15,7 +14,7 @@ const LineGraph = ( props ) => {
     const [buttonIndices, setButtonIndices] = useState([0]);
 
     if (!data) {
-        return <VictoryBar />;
+        return <VictoryScatter />;
     }
 
     return (
@@ -23,13 +22,16 @@ const LineGraph = ( props ) => {
         <VictoryChart
           theme={VictoryTheme.material}
         >
+          <VictoryAxis
+            fixLabelOverlap={true}
+          />
           {
             buttonIndices.map( index => {
               return(
                 <VictoryScatter
                   style={{
-                    data: { stroke: colors[index] },
-                    parent: { border: "1px solid #ccc"}
+                    data: { fill : colors[index] },
+                    parent: { border : "1px solid #ccc"}
 
                   }}
                   data={data}
@@ -56,4 +58,4 @@ const LineGraph = ( props ) => {
     );
 }
 
-export default LineGraph;
+export default ScatterPlot;

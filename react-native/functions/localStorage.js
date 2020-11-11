@@ -3,11 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 /**
  * Retrieve data from the local storage
  */
-retrieveData = async ( key ) => {
+async function retrieveData( key ) {
   try {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
       return value;
+    } else {
+      console.log("No data at this key!")
     }
   } catch (error) {
     console.log(error)
@@ -17,7 +19,7 @@ retrieveData = async ( key ) => {
 /**
  * Store key value pair into the local storage
  */
-storeData = async ( key, item ) => {
+ async function storeData( key, item ) {
   try {
     await AsyncStorage.setItem(
       key,

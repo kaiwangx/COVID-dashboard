@@ -133,13 +133,13 @@ async function addLocationTask(){
   // Check that there is a task to manage this background activity
   if( !(await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker")) ){
 
-    TaskManager.defineTask("BackgroundLocationTracker", ({ data: { locations }, error }) => {
+    TaskManager.defineTask("BackgroundLocationTracker", async ({ data: { locations }, error }) => {
 
       if ( error ) {
         return;
       }
       
-      let currentData = await retrieveData( "LocationData" )
+      let currentData = retrieveData( "LocationData" )
 
       // Remove old data and add new data
       let currDate = new Date().getTime();
