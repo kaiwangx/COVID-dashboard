@@ -6,13 +6,15 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Signin from './Signin'
 import Signup from './Signup'
 import UserProfile from './UserProfile'
+import Preference from './Preference'
 
 export default function SettingsScreen(props) {
   const SettingStack = createStackNavigator()
-  const functionList = [_symptomChecker, _selfReport]
+
   const [userName, setUsername] = useState(null)
   const [userToken, setUserToken] = useState('')
   const navigation = useNavigation()
+
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = () => {
@@ -21,6 +23,8 @@ export default function SettingsScreen(props) {
     }
     bootstrapAsync()
   }, [])
+
+  const functionList = [_onPressPreference, _selfReport]
 
   const setting_list = [
     {
@@ -33,8 +37,8 @@ export default function SettingsScreen(props) {
     },
   ]
 
-  function _symptomChecker() {
-    alert('Set preference')
+  function _onPressPreference() {
+    navigation.navigate('Preference')
   }
 
   function _selfReport() {
@@ -45,7 +49,7 @@ export default function SettingsScreen(props) {
     return userName == null ? 'Sign In' : 'Hello, ' + userName
   }
 
-  function onpress_avatar() {
+  function _onPressAvatar() {
     if (userName == null) {
       navigation.navigate('Signin')
     } else {
@@ -62,7 +66,7 @@ export default function SettingsScreen(props) {
         {/* <Text style={styles.header}>Settings</Text> */}
         {/* <Divider style={{ backgroundColor: 'black' }} /> */}
         <View>
-          <TouchableOpacity key={'user avatar'} onPress={onpress_avatar}>
+          <TouchableOpacity key={'user avatar'} onPress={_onPressAvatar}>
             <ListItem bottomDivider>
               <Avatar
                 source={{
@@ -100,6 +104,11 @@ export default function SettingsScreen(props) {
       <SettingStack.Screen name="Profile">
         {(props) => (
           <UserProfile {...props} userName={userName} userToken={userToken} />
+        )}
+      </SettingStack.Screen>
+      <SettingStack.Screen name="Preference">
+        {(props) => (
+          <Preference {...props} userName={userName} userToken={userToken} />
         )}
       </SettingStack.Screen>
     </SettingStack.Navigator>

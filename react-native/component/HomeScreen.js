@@ -5,12 +5,12 @@ import {
   covidCasesByZipcode,
   covidCasesByState,
 } from '../functions/dataCollection.js'
-import { weekOverMonthAverage } from "../functions/dataManipulation.js"
+import { weekOverMonthAverage } from '../functions/dataManipulation.js'
 
 import LineGraph from './LineGraph'
-import ScatterPlot from "./ScatterPlot"
+import ScatterPlot from './ScatterPlot'
 import { VictoryLine, VictoryScatter } from 'victory-native'
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'
 
 const CountyLineGraph = () => {
   const [data, setData] = useState()
@@ -24,9 +24,7 @@ const CountyLineGraph = () => {
   }
 
   return (
-    <View
-      width="100%"
-    >
+    <View width="100%">
       <LineGraph
         data={data.reverse()}
         x="date"
@@ -35,7 +33,6 @@ const CountyLineGraph = () => {
         colors={['#000000', '#FF2D00']}
       />
     </View>
-    
   )
 }
 
@@ -51,12 +48,10 @@ const StateScatterPlot = () => {
   }
 
   return (
-    <View
-      width="100%"
-    >
+    <View width="100%">
       <Text
         style={{
-          fontSize: 60
+          fontSize: 60,
         }}
       >
         State COVID Cases
@@ -67,9 +62,9 @@ const StateScatterPlot = () => {
         titles={['Death', 'Positive']}
         keys={['death', 'positive']}
         colors={['#000000', '#FF2D00']}
-      /> 
+      />
     </View>
-  ) 
+  )
 }
 
 const StateBreakDown = () => {
@@ -80,51 +75,49 @@ const StateBreakDown = () => {
   }, [])
 
   if (!data) {
-    return <View></View>;
+    return <View></View>
   }
 
-  let change = weekOverMonthAverage( data, "deathROC");
-  console.log(change)
+  let change = weekOverMonthAverage(data, 'deathROC')
+  // console.log(change)
   let percentChange = (change * 100).toFixed(2)
 
   return (
-    <View
-      width="100%"
-    >
+    <View width="100%">
       <Text
         style={{
-          fontSize: 60
+          fontSize: 60,
         }}
       >
         State Death Rate Change %{percentChange}
       </Text>
     </View>
-  ) 
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     margin: 10,
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 4,
-    borderColor: "#20232a",
+    borderColor: '#20232a',
     borderRadius: 6,
   },
-});
+})
 
 export default function HomeScreen() {
   return (
     <>
       <ScrollView>
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <BarChart state="WI" numDays={6} />
-        </View>
+        </View> */}
         <View style={styles.container}>
           <CountyLineGraph />
         </View>
         <View style={styles.container}>
-          <StateScatterPlot/>
+          <StateScatterPlot />
         </View>
         <View style={styles.container}>
           <StateBreakDown />
