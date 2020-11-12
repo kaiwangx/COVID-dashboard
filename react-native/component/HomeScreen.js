@@ -97,62 +97,35 @@ const StateBreakDown = () => {
 
 const styles = StyleSheet.create({
   container: {
-<<<<<<< HEAD
     margin: 1,
-    justifyContent: 'center', 
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: "#20232a",
-=======
-    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: '#20232a',
->>>>>>> 4f59fd4253ca712e6a20619f6c69c490e9775744
     borderRadius: 6,
   },
 })
 
 export default function HomeScreen() {
-<<<<<<< HEAD
-    // prop?
-    // const state = "WI";
+  // prop?
+  // const state = "WI";
 
-    const [stateData, setStateData] = useState(null);
+  const [stateData, setStateData] = useState(null)
 
-    async function fetchStateData() {
-        const response = await covidCasesByState("WI");
-        setStateData(response);
-    }
-    useEffect(() => {
-        fetchStateData()
-    }, []);
+  async function fetchStateData() {
+    const response = await covidCasesByState('WI')
+    setStateData(response)
+  }
+  useEffect(() => {
+    fetchStateData()
+  }, [])
 
-    return (
-        <>
-            <ScrollView>
-                <View style={styles.container}>
-                    <BarChart data={stateData} numDays={7} />
-                </View>
-                <View style={styles.container}>
-                    <CountyLineGraph />
-                </View>
-                <View style={styles.container}>
-                    <StateScatterPlot/>
-                </View>
-                <View style={styles.container}>
-                    <StateBreakDown />
-                </View>
-            </ScrollView>
-        </>
-=======
   return (
     <>
       <ScrollView>
-        {/* <View style={styles.container}>
-          <BarChart state="WI" numDays={6} />
-        </View> */}
+        <View style={styles.container}>
+          <BarChart data={stateData} numDays={7} />
+        </View>
         <View style={styles.container}>
           <CountyLineGraph />
         </View>
@@ -164,6 +137,5 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </>
->>>>>>> 4f59fd4253ca712e6a20619f6c69c490e9775744
   )
 }

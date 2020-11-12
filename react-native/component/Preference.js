@@ -21,8 +21,12 @@ export default function Preference(props) {
 
   const nothing = () => {}
 
-  function _onPressStyle() {
+  function _setStyle() {
     alert('style')
+  }
+
+  function _setDefaultLocation() {
+    alert('defaultLocation')
   }
 
   const setting_list = [
@@ -38,13 +42,18 @@ export default function Preference(props) {
       ),
     },
     {
+      title: 'Default Location',
+      icon: <Icon name="location-city" type="materialIcons" />,
+      rightContent: <Text style={{ fontSize: 15, marginRight: 5 }}>WI</Text>,
+    },
+    {
       title: 'Graph Style',
       icon: <Icon name="graphic-eq" type="materialIcons" />,
       rightContent: <ListItem.Chevron />,
     },
   ]
 
-  const functionList = [nothing, _onPressStyle]
+  const functionList = [nothing, _setDefaultLocation, _setStyle]
 
   return (
     <View style={styles.container}>
