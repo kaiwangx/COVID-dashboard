@@ -10,6 +10,8 @@ import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
 import AuthContext from './component/AuthContext.js'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import SymptomChecker from './component/SymptomChecker'
 
 const Tab = createBottomTabNavigator()
 
@@ -113,7 +115,8 @@ export default function App() {
                 ? 'ios-information-circle'
                 : 'ios-information-circle-outline'
             } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list'
+              iconName = 'settings'
+              return <MaterialIcons name={iconName} size={size} color={color} />
             } else if (route.name === 'Map') {
               iconName = focused ? 'map' : 'map-outline'
               return (
@@ -123,6 +126,8 @@ export default function App() {
                   color={color}
                 />
               )
+            } else if (route.name === 'Symptoms Checker') {
+              iconName = focused ? 'ios-list-box' : 'ios-list'
             }
 
             // You can return any component that you like here!
@@ -136,7 +141,7 @@ export default function App() {
       >
         <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Home" component={HomeScreen} />
-
+        <Tab.Screen name="Symptoms Checker" component={SymptomChecker} />
         <Tab.Screen name="Settings">
           {(props) => (
             <SettingsScreen
