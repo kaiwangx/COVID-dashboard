@@ -104,32 +104,45 @@ const StateBreakDown = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    margin: 1,
     justifyContent: 'center', 
     alignItems: 'center',
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: "#20232a",
     borderRadius: 6,
   },
 });
 
 export default function HomeScreen() {
-  return (
-    <>
-      <ScrollView>
-        <View style={styles.container}>
-          <BarChart state="WI" numDays={6} />
-        </View>
-        <View style={styles.container}>
-          <CountyLineGraph />
-        </View>
-        <View style={styles.container}>
-          <StateScatterPlot/>
-        </View>
-        <View style={styles.container}>
-          <StateBreakDown />
-        </View>
-      </ScrollView>
-    </>
+    // prop?
+    // const state = "WI";
+
+    const [stateData, setStateData] = useState(null);
+
+    async function fetchStateData() {
+        const response = await covidCasesByState("WI");
+        setStateData(response);
+    }
+    useEffect(() => {
+        fetchStateData()
+    }, []);
+
+    return (
+        <>
+            <ScrollView>
+                <View style={styles.container}>
+                    <BarChart data={stateData} numDays={7} />
+                </View>
+                <View style={styles.container}>
+                    <CountyLineGraph />
+                </View>
+                <View style={styles.container}>
+                    <StateScatterPlot/>
+                </View>
+                <View style={styles.container}>
+                    <StateBreakDown />
+                </View>
+            </ScrollView>
+        </>
   )
 }
