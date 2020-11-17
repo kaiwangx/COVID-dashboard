@@ -22,9 +22,6 @@ const ScatterPlot = ( props ) => {
         <VictoryChart
           theme={VictoryTheme.material}
         >
-          <VictoryAxis
-            fixLabelOverlap={true}
-          />
           {
             buttonIndices.map( index => {
               return(

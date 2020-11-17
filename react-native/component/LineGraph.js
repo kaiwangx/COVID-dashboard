@@ -33,7 +33,6 @@ const LineGraph = ( props ) => {
                   style={{
                     data: { stroke: colors[index] },
                     parent: { border: "1px solid #ccc"}
-
                   }}
                   data={data}
                   x={x}
