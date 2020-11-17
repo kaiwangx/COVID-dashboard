@@ -9,10 +9,10 @@ async function retrieveData( key ) {
     if (value !== null) {
       return value;
     } else {
-      console.log("No data at this key!")
+      console.log("No data at this key!");
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 

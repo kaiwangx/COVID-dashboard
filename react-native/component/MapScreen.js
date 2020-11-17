@@ -1,7 +1,7 @@
-import {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps'
-import React from 'react';
-import MapView from 'react-native-maps';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { PROVIDER_GOOGLE, Heatmap } from 'react-native-maps'
+import React from 'react'
+import MapView from 'react-native-maps'
+import { StyleSheet, View, Dimensions } from 'react-native'
 
 export default function MapScreen() {
   return (
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    
   },
 });
 
