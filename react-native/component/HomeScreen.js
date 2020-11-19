@@ -43,10 +43,10 @@ const StateBreakDown = () => {
 const styles = StyleSheet.create({
   container: {
     margin: 1,
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: "#20232a",
+    borderColor: '#20232a',
     borderRadius: 6,
   },
 })
