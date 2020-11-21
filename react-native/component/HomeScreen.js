@@ -12,61 +12,6 @@ import ScatterPlot from './ScatterPlot'
 import { VictoryLine, VictoryScatter } from 'victory-native'
 import Constants from 'expo-constants'
 
-const CountyLineGraph = () => {
-  const [data, setData] = useState()
-
-  useEffect(() => {
-    covidCasesByZipcode(53703, 7, true).then((r) => setData(r))
-  }, [])
-
-  if (!data) {
-    return <VictoryLine />
-  }
-
-  return (
-    <View width="100%">
-      <LineGraph
-        data={data.reverse()}
-        x="date"
-        titles={['Death', 'Positive']}
-        keys={['deathCtROC', 'positiveCtROC']}
-        colors={['#000000', '#FF2D00']}
-      />
-    </View>
-  )
-}
-
-const StateScatterPlot = () => {
-  const [data, setData] = useState()
-
-  useEffect(() => {
-    covidCasesByState('WI').then((r) => setData(r))
-  }, [])
-
-  if (!data) {
-    return <VictoryScatter />
-  }
-
-  return (
-    <View width="100%">
-      <Text
-        style={{
-          fontSize: 60,
-        }}
-      >
-        State COVID Cases
-      </Text>
-      <ScatterPlot
-        data={data.reverse()}
-        x="date"
-        titles={['Death', 'Positive']}
-        keys={['death', 'positive']}
-        colors={['#000000', '#FF2D00']}
-      />
-    </View>
-  )
-}
-
 const StateBreakDown = () => {
   const [data, setData] = useState()
 
@@ -107,35 +52,59 @@ const styles = StyleSheet.create({
 })
 
 export default function HomeScreen() {
-  // prop?
-  // const state = "WI";
+    // prop?
+    // const state = "WI";
+    // const zipcode = 53703;
 
-  const [stateData, setStateData] = useState(null)
+    // data fetching code based on 
+    // https://reactjs.org/docs/testing-recipes.html#data-fetching 
+    const [stateData, setStateData] = useState(null);
 
-  async function fetchStateData() {
-    const response = await covidCasesByState('WI')
-    setStateData(response)
-  }
-  useEffect(() => {
-    fetchStateData()
-  }, [])
+    async function fetchStateData() {
+        const response = await covidCasesByState("WI");
+        setStateData(response);
+    }
+    useEffect(() => {
+        fetchStateData();
+    }, []);
 
-  return (
-    <>
-      <ScrollView>
-        <View style={styles.container}>
-          <BarChart data={stateData} numDays={7} />
-        </View>
-        <View style={styles.container}>
-          <CountyLineGraph />
-        </View>
-        <View style={styles.container}>
-          <StateScatterPlot />
-        </View>
-        <View style={styles.container}>
-          <StateBreakDown />
-        </View>
-      </ScrollView>
-    </>
-  )
+    const [localData, setLocalData] = useState(null);
+
+    async function fetchLocalData() {
+        const response = await covidCasesByZipcode(53703, 7, true);
+        setLocalData(response);
+    }
+    useEffect(() => {
+        fetchLocalData();
+    }, []);
+
+    return (
+        <>
+            <Text style={{textAlign: "center", fontSize: 16}}>
+                Hello Guest! 
+            </Text>
+            <ScrollView>
+                <BarChart data={stateData} numDays={7} style={styles.container}/>
+                <LineGraph
+                    data={localData}
+                    x="date"
+                    yTitles={['Death', 'Positive']}
+                    yKeys={['deathCtROC', 'positiveCtROC']}
+                    colors={['#000000', '#FF2D00']}
+                    style={styles.container}
+                />
+                <ScatterPlot
+                    data={stateData}
+                    x="date"
+                    yTitles={['Death', 'Positive']}
+                    yKeys={['death', 'positive']}
+                    colors={['#000000', '#FF2D00']}
+                    style={styles.container}
+                />
+                <View style={styles.container}>
+                    <StateBreakDown />
+                </View>
+            </ScrollView>
+        </>
+  );
 }

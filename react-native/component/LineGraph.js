@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native'
+import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryLabel } from 'victory-native'
 import { ButtonGroup } from 'react-native-elements'
 
-const LineGraph = ( props ) => {
-
-    let data = props.data;
-    let x = props.x;
-    let yTitles = props.titles;
-    let yKeys = props.keys;
-    let colors = props.colors;
+const LineGraph = (props) => {
+    const { data, x, yTitles, yKeys, colors, style } = props;
 
     const [buttonIndices, setButtonIndices] = useState([0]);
 
@@ -17,44 +12,42 @@ const LineGraph = ( props ) => {
         return <VictoryBar />;
     }
 
-    return (
-      <View>
-        <VictoryChart
-          theme={VictoryTheme.material}
-          
-        >
-          <VictoryAxis
-            fixLabelOverlap={true}
-          />
-          {
-            buttonIndices.map( index => {
-              return(
-                <VictoryLine
-                  style={{
+    let cleanData = data.slice().reverse();
+    const plots = buttonIndices.map(index => {
+        return (
+            <VictoryLine
+                style={{
                     data: { stroke: colors[index] },
                     parent: { border: "1px solid #ccc"}
-                  }}
-                  data={data}
-                  x={x}
-                  y={yKeys[index]}
-                  key={index}
-                />
-              )
-            })
-          }
-        </VictoryChart>
-        {yTitles.length > 1 &&
-          <ButtonGroup
+                }}
+                data={cleanData}
+                x={x}
+                y={yKeys[index]}
+                key={index}
+            />
+        );
+    });
+
+    const buttons = (
+        <ButtonGroup
             onPress={r => setButtonIndices(r)}
             selectedIndexes={buttonIndices}
             buttons={yTitles}
             containerStyle={{height: 50}}
             selectMultiple={true}
             underlayColor={"#000000"}
-          /> 
-        }
-        
-      </View>
+        />
+    );
+
+    return (
+        <View style={style}>
+            <VictoryChart theme={VictoryTheme.material}>
+                <VictoryLabel text="Local COVID Cases" textAnchor="middle" x={200} y={30} style={[{fontSize: 24}]}/>
+                <VictoryAxis fixLabelOverlap={true} />
+                {plots}
+            </VictoryChart>
+            {yTitles.length > 1 && buttons}
+        </View>
     );
 }
 
