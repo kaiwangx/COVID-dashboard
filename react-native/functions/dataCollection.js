@@ -43,8 +43,8 @@ async function covidCasesByZipcode(zipCode, numberOfDays = 7, rateOfChange = fal
 
   // Get currently store data
   const storedData = await retrieveData('CovidCasesByZipcode');
-  const storedJSON = JSON.parse(storedData);
-
+  const storedJSON = JSON.parse(storedData)
+  
   /// If the information is up to date
   const currentDate = new Date().setHours(0,0,0,0);
   const lastUpdate = new Date(storedJSON['lastUpdated']).setHours(0,0,0,0);
@@ -110,8 +110,8 @@ async function covidCasesByState(state, numberOfDays = 31) {
 
   // Get currently store data
   const storedData = await retrieveData('CovidCasesByState');
-  const storedJSON = JSON.parse(storedData);
-
+  const storedJSON =  JSON.parse(storedData)
+  
   /// If the information is up to date
   const currentDate = new Date().setHours(0,0,0,0);
   const lastUpdate = new Date(storedJSON['lastUpdated']).setHours(0,0,0,0);
