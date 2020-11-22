@@ -172,4 +172,4 @@ async function removeLocationTask(){
   }
 }
 
-export { getZipcode, getStateTwoDigitCode };
+export { getZipcode, getStateTwoDigitCode, addLocationTask, getPermissionStatus};
