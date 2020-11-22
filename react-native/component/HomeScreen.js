@@ -21,6 +21,14 @@ const styles = StyleSheet.create({
     },
 });
 
+const loadingStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    }
+});
+
 export default function HomeScreen() {
     // prop?
     // const state = "WI";
@@ -48,11 +56,16 @@ export default function HomeScreen() {
         fetchLocalData();
     }, []);
   
-    let change, percentChange;
-    if (stateData) {
-        change = weekOverMonthAverage(stateData, 'deathROC');
-        percentChange = (change * 100).toFixed(2);
+    if (!stateData || !localData) {
+        return (
+            <View style={loadingStyle.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
     }
+
+    const change = weekOverMonthAverage(stateData, 'deathROC');
+    const percentChange = (change * 100).toFixed(2);
 
     return (
         <>
