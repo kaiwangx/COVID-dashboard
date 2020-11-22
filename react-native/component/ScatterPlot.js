@@ -41,9 +41,10 @@ const ScatterPlot = (props) => {
 
     return (
         <View style={style}>
-            <VictoryChart theme={VictoryTheme.material}>
+            <VictoryChart theme={VictoryTheme.material} domainPadding={15}>
                 <VictoryLabel text="State COVID Cases" textAnchor="middle" x={200} y={30} style={[{fontSize: 24}]}/>
                 <VictoryAxis fixLabelOverlap={true}/>
+                <VictoryAxis dependentAxis />
                 {plots}
             </VictoryChart>
             {yTitles.length > 1 && buttons}

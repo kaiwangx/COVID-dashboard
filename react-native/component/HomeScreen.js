@@ -1,55 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, FlatList, View, ScrollView } from 'react-native'
-import BarChart from './BarChart'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import {
-  covidCasesByZipcode,
-  covidCasesByState,
+    covidCasesByZipcode,
+    covidCasesByState,
 } from '../functions/dataCollection.js'
 import { weekOverMonthAverage } from '../functions/dataManipulation.js'
-
+import BarChart from './BarChart'
 import LineGraph from './LineGraph'
 import ScatterPlot from './ScatterPlot'
-import { VictoryLine, VictoryScatter } from 'victory-native'
-import Constants from 'expo-constants'
-
-const StateBreakDown = () => {
-  const [data, setData] = useState()
-
-  useEffect(() => {
-    covidCasesByState('WI').then((r) => setData(r))
-  }, [])
-
-  if (!data) {
-    return <View></View>
-  }
-
-  let change = weekOverMonthAverage(data, 'deathROC')
-  // console.log(change)
-  let percentChange = (change * 100).toFixed(2)
-
-  return (
-    <View width="100%">
-      <Text
-        style={{
-          fontSize: 60,
-        }}
-      >
-        State Death Rate Change %{percentChange}
-      </Text>
-    </View>
-  )
-}
+import Statistic from './Statistic'
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#20232a',
-    borderRadius: 6,
-  },
-})
+    container: {
+        margin: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#20232a',
+        borderRadius: 6,
+    },
+});
+
+const loadingStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    }
+});
 
 export default function HomeScreen() {
     // prop?
@@ -77,10 +55,21 @@ export default function HomeScreen() {
     useEffect(() => {
         fetchLocalData();
     }, []);
+  
+    if (!stateData || !localData) {
+        return (
+            <View style={loadingStyle.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+
+    const change = weekOverMonthAverage(stateData, 'deathROC');
+    const percentChange = (change * 100).toFixed(2);
 
     return (
         <>
-            <Text style={{textAlign: "center", fontSize: 16}}>
+            <Text style={{textAlign: "center", fontSize: 24}}>
                 Hello Guest! 
             </Text>
             <ScrollView>
@@ -101,9 +90,11 @@ export default function HomeScreen() {
                     colors={['#000000', '#FF2D00']}
                     style={styles.container}
                 />
-                <View style={styles.container}>
-                    <StateBreakDown />
-                </View>
+                <Statistic
+                    title="State Death Rate Change"
+                    data={percentChange + "%"}
+                    style={styles.container}
+                />
             </ScrollView>
         </>
   );
