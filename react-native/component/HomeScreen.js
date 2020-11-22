@@ -69,7 +69,7 @@ export default function HomeScreen() {
 
     return (
         <>
-            <Text style={{textAlign: "center", fontSize: 16}}>
+            <Text style={{textAlign: "center", fontSize: 24}}>
                 Hello Guest! 
             </Text>
             <ScrollView>
