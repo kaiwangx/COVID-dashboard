@@ -49,6 +49,6 @@ const LineGraph = (props) => {
             {yTitles.length > 1 && buttons}
         </View>
     );
-}
+};
 
 export default LineGraph;
