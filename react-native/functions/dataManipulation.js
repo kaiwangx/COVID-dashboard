@@ -1,22 +1,44 @@
-function weekOverMonthAverage( data, key ){
-  let monthSum = 0;
+/**
+ * Puts dayPeriod over previous dayPeriod to estimate change
+ * @param {JSON} data An array of json objects
+ * @param {String} key The object key to be used
+ * @param {Integer} dayPeriod 
+ */
+function periodOverPeriod( data, key, dayPeriod ){
 
-  let i
-  for( i = 0; i < data.length - 7; i++ ) {
-    monthSum += data[i][key] 
+  // Check for valid arguments
+  if( dayPeriod*2 > data.length ){
+    throw new RangeError("Error: Not enough data passed")
+  } else if( !( key in data[0])){
+    throw new RangeError("Error: Key not valid")
   }
 
-  let monthAverage = monthSum / (data.length - 7)
+  let currentSum = 0;
 
-  let weekSum = 0;
+  let i = 0;
+  for( i = i; i < dayPeriod; i++ ) {
+    currentSum += data[i][key] 
+  }
 
-  for( i = i; i < data.length; i++ ) {
-    weekSum += data[i][key] 
+  let previousSum = 0;
+
+  for( i = i; i < dayPeriod*2; i++ ) {
+    previousSum += data[i][key] 
   } 
 
-  let weekAverage = weekSum / 7
-
-  return weekAverage / monthAverage;
+  return currentSum / previousSum;
 }
 
-export { weekOverMonthAverage }
+function dayOverDay( data, key ){
+  return periodOverPeriod( data, key, 1);
+}
+
+function weekOverWeek( data, key ){
+  return periodOverPeriod( data, key, 7);
+}
+
+function monthOverMonth( data, key ){
+  return periodOverPeriod( data, key, 30);
+}
+
+export { dayOverDay, weekOverWeek, monthOverMonth }

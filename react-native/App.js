@@ -12,7 +12,7 @@ import SettingsScreen from './component/SettingsScreen'
 import AuthContext from './component/AuthContext.js'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import SymptomChecker from './component/SymptomChecker'
-import {addLocationTask} from "./functions/location.js"
+import {addLocationTask, logBackgroundLocations} from "./functions/location.js"
 //import {getPermissionStatus} from "./functions/location.js"
 import {retrieveData} from "./functions/localStorage.js"
 
@@ -31,7 +31,7 @@ const task = async () => {
 }
 
 // this approach
-addLocationTask()
+
 
 const data = async () => {
   try {
@@ -44,9 +44,11 @@ const data = async () => {
 
 //let currDate = new Date().getTime();
 
-console.log(data.toString);
-
 export default function App() {
+
+  addLocationTask();
+  logBackgroundLocations();
+
   /*
   Parse.setAsyncStorage(AsyncStorage)
   Parse.initialize(

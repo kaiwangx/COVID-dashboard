@@ -4,7 +4,7 @@ import {
     covidCasesByZipcode,
     covidCasesByState,
 } from '../functions/dataCollection.js'
-import { weekOverMonthAverage } from '../functions/dataManipulation.js'
+import { weekOverWeek } from '../functions/dataManipulation.js'
 import BarChart from './BarChart'
 import LineGraph from './LineGraph'
 import ScatterPlot from './ScatterPlot'
@@ -30,6 +30,7 @@ const loadingStyle = StyleSheet.create({
 });
 
 export default function HomeScreen() {
+    
     // prop?
     // const state = "WI";
     // const zipcode = 53703;
@@ -64,7 +65,7 @@ export default function HomeScreen() {
         );
     }
 
-    const change = weekOverMonthAverage(stateData, 'deathROC');
+    const change = weekOverWeek(stateData, 'deathROC');
     const percentChange = (change * 100).toFixed(2);
 
     return (

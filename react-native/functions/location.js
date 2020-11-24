@@ -133,30 +133,32 @@ async function addLocationTask(){
   // Check that there is a task to manage this background activity
   if( !(await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker")) ){
 
-    TaskManager.defineTask("BackgroundLocationTracker", async ({ data: { locations }, error }) => {
+    async function backgroundLocationTask(task){
 
-      if ( error ) {
+      if ( task.error ) {
         return;
       }
       
-      let currentData = retrieveData( "LocationData" )
+      let currentData = await retrieveData( "LocationData" )
+      currentData = currentData == undefined ? {} : currentData;
 
       // Remove old data and add new data
       let currDate = new Date().getTime();
       let freshData = removeOldData(currentData);
-      freshData[currDate] = locations;
+      freshData[currDate] = task.data.locations;
 
-      storeData("LocationData", freshData)
+      storeData("LocationData", JSON.stringify(freshData))
+    }
 
-    })
+    TaskManager.defineTask("BackgroundLocationTracker", backgroundLocationTask)
   }
 
   // Start location Tracker if not already started
-  if( !(await Location.hasStartedLocationUpdatesAsync()) ){
+  if( !(await Location.hasStartedLocationUpdatesAsync("BackgroundLocationTracker")) ){
     let asyncLocationOptions = {
-      'accuracy' : 3,
-      'deferredUpdatesInterval' : 86400000,
-      'distanceInterval' : 200,
+      'accuracy' : 6,
+      'deferredUpdatesInterval' : 1,
+      'distanceInterval' : 1,
     }
 
     Location.startLocationUpdatesAsync("BackgroundLocationTracker", asyncLocationOptions)
@@ -172,4 +174,9 @@ async function removeLocationTask(){
   }
 }
 
-export { getZipcode, getStateTwoDigitCode, addLocationTask, getPermissionStatus};
+async function logBackgroundLocations(){
+  const storeData = await retrieveData('LocationData');
+  console.log(JSON.parse(storeData))
+}
+
+export { getZipcode, getStateTwoDigitCode, addLocationTask, getPermissionStatus, logBackgroundLocations};
