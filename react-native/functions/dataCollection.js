@@ -108,9 +108,9 @@ async function covidCasesByState(state, days = 31) {
     try {
       const response = await fetch(
         'https://api.covidtracking.com/v1/states/' + state + '/daily.json'
-      )
+      );
 
-      const jsonData = await response.json()
+      const jsonData = await response.json();
 
       storeData("lastUpdateState", Date());
       storeData("CovidCasesByState", JSON.stringify(jsonData));
@@ -118,7 +118,7 @@ async function covidCasesByState(state, days = 31) {
       data = jsonData;
 
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
