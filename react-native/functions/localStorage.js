@@ -9,7 +9,7 @@ async function retrieveData( key ) {
     if (value !== null) {
       return value;
     } else {
-      console.log("No data at this key!");
+      return {}
     }
   } catch (error) {
     console.log(error);
