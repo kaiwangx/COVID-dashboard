@@ -5,33 +5,24 @@ import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
-import AuthContext from './AuthContext.js'
+import AuthContext from './context/AuthContext.js'
+import { loginWithPassword } from '../functions/backend'
+
+function signInWithToken(userName, userToken) {
+  Parse.setAsyncStorage(AsyncStorage)
+  Parse.initialize(
+    'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
+    'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
+  ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+  Parse.serverURL = 'https://parseapi.back4app.com/'
+  Parse.User.logIn()
+}
 
 export default function Signin() {
   const { signIn } = React.useContext(AuthContext)
   const [username, onChangeUsename] = useState('')
   const [password, onChangePassword] = useState('')
   const navigation = useNavigation()
-
-  function login(username, password) {
-    Parse.setAsyncStorage(AsyncStorage)
-    Parse.initialize(
-      'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
-      'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
-    ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
-    Parse.serverURL = 'https://parseapi.back4app.com/'
-
-    var user = Parse.User.logIn(username, password)
-      .then(function (user) {
-        signIn(user.get('sessionToken'), user.get('username'))
-        alert('You have signed in successfully')
-        navigation.navigate('Setting')
-      })
-      .catch(function (error) {
-        console.log('Error: ' + error.code + ' ' + error.message)
-        alert(error.message)
-      })
-  }
 
   return (
     <View style={styles.container}>
@@ -63,7 +54,13 @@ export default function Signin() {
       </View>
 
       <View style={styles.loginButton}>
-        <Button title="Sign In" onPress={() => login(username, password)} />
+        <Button
+          title="Sign In"
+          onPress={async () => {
+            await loginWithPassword(username, password, navigation, 'Setting')
+            signIn()
+          }}
+        />
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text
