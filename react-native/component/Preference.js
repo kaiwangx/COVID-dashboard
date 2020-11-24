@@ -9,7 +9,6 @@ import {
 import { Input } from 'react-native-elements'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
-import AuthContext from './AuthContext.js'
 import { Switch } from 'react-native-paper'
 import { ListItem, Icon, Avatar, Divider, Header } from 'react-native-elements'
 import Foundation from 'react-native-vector-icons/Foundation'

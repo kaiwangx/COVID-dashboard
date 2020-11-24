@@ -3,15 +3,11 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
-import AuthContext from './AuthContext.js'
+import { logout } from '../functions/backend'
+import AuthContext from './context/AuthContext.js'
 
 export default function UserProfile(props) {
-  //   const [userName, setUsername] = useState('')
-  //   const [userToken, setUserToken] = useState('')
-  //   const [profile, setProfile] = useState('')
-  //   const [profileUpdated, setProfileUpdated] = useState('')
   const { signOut } = React.useContext(AuthContext)
-
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -19,7 +15,13 @@ export default function UserProfile(props) {
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}></Text>
         </View>
         <View style={styles.loginButton}>
-          <Button title="Sign Out" onPress={() => signOut()} />
+          <Button
+            title="Sign Out"
+            onPress={() => {
+              logout()
+              signOut()
+            }}
+          />
         </View>
       </ScrollView>
     </View>

@@ -4,17 +4,24 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Parse from 'parse/react-native.js'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
-import AuthContext from './component/AuthContext.js'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import SymptomChecker from './component/SymptomChecker'
 import {addLocationTask, logBackgroundLocations} from "./functions/location.js"
 //import {getPermissionStatus} from "./functions/location.js"
 import {retrieveData} from "./functions/localStorage.js"
+import TokenContext from './component/context/TokenContext.js'
+import AuthContext from './component/context/AuthContext.js'
+import {
+  retrieveData,
+  storeData,
+  removeData,
+} from './functions/localStorage.js'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { loginWithToken, getCurrentUser } from './functions/backend'
 
 const Tab = createBottomTabNavigator()
 
@@ -66,53 +73,34 @@ export default function App() {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-            userName: action.name,
-          }
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignin: true,
-            userToken: action.token,
-            userName: action.name,
           }
         case 'SIGN_OUT':
           return {
             ...prevState,
             isSignin: false,
-            userToken: null,
           }
       }
     },
     {
-      isLoading: true, // reserved for loading screen
       isSignin: false,
-      userToken: null,
-      userName: null,
     }
   )
+
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken, userName
-
-      try {
-        userToken = await AsyncStorage.getItem('userToken')
-        userName = await AsyncStorage.getItem('userName')
-        // console.log(userToken)
-        // console.log(userName)
-      } catch (e) {
-        console.log(e)
+      // loginWithToken()
+      var user = await getCurrentUser()
+      // console.log(user)
+      if (user) {
+        dispatch({ type: 'SIGN_IN' })
+      } else {
+        dispatch({ type: 'SIGN_OUT' })
       }
-      // console.log('app.js token: ' + userToken)
-      // After restoring token, we may need to validate it in production apps
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken, name: userName })
     }
 
     bootstrapAsync()
@@ -121,16 +109,11 @@ export default function App() {
   const authContext = React.useMemo(
     () => ({
       signIn: async (_token, _name) => {
-        dispatch({ type: 'SIGN_IN', token: _token, name: _name })
-        // store token to asyncStorage
-        try {
-          await AsyncStorage.setItem('userToken', _token)
-          await AsyncStorage.setItem('userName', _name)
-        } catch (e) {
-          console.log(e)
-        }
+        dispatch({ type: 'SIGN_IN' })
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: async () => {
+        dispatch({ type: 'SIGN_OUT' })
+      },
     }),
     []
   )
@@ -176,13 +159,7 @@ export default function App() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Symptoms Checker" component={SymptomChecker} />
         <Tab.Screen name="Settings">
-          {(props) => (
-            <SettingsScreen
-              {...props}
-              userName={state.userName}
-              userToken={state.userToken}
-            />
-          )}
+          {(props) => <SettingsScreen {...props} isSignin={state.isSignin} />}
         </Tab.Screen>
       </Tab.Navigator>
     )
