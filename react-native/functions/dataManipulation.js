@@ -1,10 +1,29 @@
 /**
+ * Adds Rate of Change to data
+ * 
+ * Works from the start setting each days ROC value to equal 
+ * its value minus the previous days
+ *
+ * @param {Array} keys Array of keys to add rate of change to
+ * @param {Array} data Array of Json data
+ */
+export function addRateOfChange( keys, data ) {
+  keys.forEach((key) => {
+    for (let i = 0; i < data.length - 1; i++) {
+      data[i][key + 'ROC'] = data[i][key] - data[i + 1][key];
+    }
+  })
+
+  return data;
+}
+
+/**
  * Puts dayPeriod over previous dayPeriod to estimate change
  * @param {JSON} data An array of json objects
  * @param {String} key The object key to be used
  * @param {Integer} dayPeriod 
  */
-function periodOverPeriod( data, key, dayPeriod ){
+function _periodOverPeriod( data, key, dayPeriod ){
 
   // Check for valid arguments
   if( dayPeriod*2 > data.length ){
@@ -29,16 +48,14 @@ function periodOverPeriod( data, key, dayPeriod ){
   return currentSum / previousSum;
 }
 
-function dayOverDay( data, key ){
-  return periodOverPeriod( data, key, 1);
+export function dayOverDay( data, key ){
+  return _periodOverPeriod( data, key, 1);
 }
 
-function weekOverWeek( data, key ){
-  return periodOverPeriod( data, key, 7);
+export function weekOverWeek( data, key ){
+  return _periodOverPeriod( data, key, 7);
 }
 
-function monthOverMonth( data, key ){
-  return periodOverPeriod( data, key, 30);
+export function monthOverMonth( data, key ){
+  return _periodOverPeriod( data, key, 30);
 }
-
-export { dayOverDay, weekOverWeek, monthOverMonth }

@@ -4,7 +4,7 @@ import {
   covidCasesByZipcode,
   covidCasesByState,
 } from '../functions/dataCollection.js'
-import { weekOverWeek } from '../functions/dataManipulation.js'
+import { weekOverWeek, addRateOfChange } from '../functions/dataManipulation.js'
 import BarChart from './BarChart'
 import LineGraph from './LineGraph'
 import ScatterPlot from './ScatterPlot'
@@ -64,7 +64,7 @@ export default function HomeScreen() {
     )
   }
 
-  const change = weekOverMonthAverage(stateData, 'deathROC')
+  const change = weekOverWeek(addRateOfChange(['death'], stateData), 'deathROC')
   const percentChange = (change * 100).toFixed(2)
 
   return (

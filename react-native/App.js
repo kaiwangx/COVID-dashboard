@@ -11,49 +11,14 @@ import SettingsScreen from './component/SettingsScreen'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import SymptomChecker from './component/SymptomChecker'
 import {addLocationTask, logBackgroundLocations} from "./functions/location.js"
-//import {getPermissionStatus} from "./functions/location.js"
-import {retrieveData} from "./functions/localStorage.js"
-import TokenContext from './component/context/TokenContext.js'
 import AuthContext from './component/context/AuthContext.js'
-import {
-  retrieveData,
-  storeData,
-  removeData,
-} from './functions/localStorage.js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { loginWithToken, getCurrentUser } from './functions/backend'
 
 const Tab = createBottomTabNavigator()
 
-
-
-//I've tried this approach
-const task = async () => {
-  try{
-    const task1 = await addLocationTask()
-    return task1
-  } catch (e){
-    console.error(e)
-  }
-}
-
-// this approach
-
-
-const data = async () => {
-  try {
-    const data1 = await retrieveData("LocationData");
-    return data1
-  } catch (e){
-    console.error(e)
-  }
-}
-
-//let currDate = new Date().getTime();
-
 export default function App() {
 
-  addLocationTask();
   logBackgroundLocations();
 
   /*

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { storeData, retrieveData } from "../functions/localStorage.js"
 
 
-function getStateTwoDigitCode(stateFullName) {
+export function getStateTwoDigitCode(stateFullName) {
   stateList = {
     'Arizona': 'AZ',
     'Alabama': 'AL',
@@ -68,7 +69,7 @@ function getStateTwoDigitCode(stateFullName) {
  * Uses keys 
  * [city, country, district, isoCountryCode, name, postalCode, region, street, subregion, timezone]
  */
-async function getZipcode( key ) {
+export async function getZipcode( key ) {
   let { status } = await Location.requestPermissionsAsync();
 
   if (status !== 'granted') {
@@ -86,7 +87,7 @@ async function getZipcode( key ) {
  * 
  * Returns false if permission is not given, the status otherwise
  */
-async function getPermissionStatus() {
+export async function getPermissionStatus() {
   let { status } = await Location.requestPermissionsAsync();
 
   if (status !== 'granted') {
@@ -102,7 +103,7 @@ async function getPermissionStatus() {
  * 
  * @param {JSON} jsonLocation - json object that uses date keys and arrays for locations
  */
-function removeOldData( jsonLocation ){
+export function _removeOldData( jsonLocation ){
 
   let dateCutoff = new Date();
   dateCutoff.setDate(dateCutoff.getDate() - 14)
@@ -121,7 +122,7 @@ function removeOldData( jsonLocation ){
 /**
  * If not existent create a location task to run in the background
  */
-async function addLocationTask(){
+export async function addLocationTask(){
 
   // Permission check
   let permission = await getPermissionStatus()
@@ -133,18 +134,18 @@ async function addLocationTask(){
   // Check that there is a task to manage this background activity
   if( !(await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker")) ){
 
-    async function backgroundLocationTask(task){
+    async function backgroundLocationTask( task ){
 
       if ( task.error ) {
         return;
       }
       
       let currentData = await retrieveData( "LocationData" )
-      currentData = currentData == undefined ? {} : currentData;
+      currentData = currentData == undefined ? {} : JSON.parse(currentData);
 
       // Remove old data and add new data
       let currDate = new Date().getTime();
-      let freshData = removeOldData(currentData);
+      let freshData = _removeOldData(currentData);
       freshData[currDate] = task.data.locations;
 
       storeData("LocationData", JSON.stringify(freshData))
@@ -168,15 +169,30 @@ async function addLocationTask(){
 /**
  * Removes the location tracking task
  */
-async function removeLocationTask(){
+export async function removeLocationTask(){
   if( await TaskManager.isTaskRegisteredAsync("BackgroundLocationTracker") ){
     Location.stopLocationUpdatesAsync("BackgroundLocationTracker")
   }
 }
 
-async function logBackgroundLocations(){
-  const storeData = await retrieveData('LocationData');
-  console.log(JSON.parse(storeData))
+/**
+ * Used to log the locations that have been recently logged
+ */
+export async function logBackgroundLocations(){
+  const storedData = await retrieveData('LocationData');
+  if( storeData == undefined ){
+    console.log(JSON.parse(storedData))
+  }
 }
 
-export { getZipcode, getStateTwoDigitCode, addLocationTask, getPermissionStatus, logBackgroundLocations};
+export async function backgroundLocationUpload(){
+  Parse.setAsyncStorage(AsyncStorage)
+  Parse.initialize(
+    'vpmiVf8KrJoGqkU5jo2M26jtX4wiL5oxQROLLRwO',
+    'fn39GXtWxBJyQTM1Eyl11uRYUYPyKjib5MtfbMWb'
+  ) //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+  Parse.serverURL = 'https://parseapi.back4app.com/';
+
+  const userLocationData = retrieveData('LocationData')
+  var locationDump = new Parse.LocationData
+}
