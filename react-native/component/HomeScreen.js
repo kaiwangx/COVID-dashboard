@@ -38,23 +38,31 @@ export default function HomeScreen() {
   // https://reactjs.org/docs/testing-recipes.html#data-fetching
   const [stateData, setStateData] = useState(null)
 
-  async function fetchStateData() {
-    const response = await covidCasesByState('WI')
-    setStateData(response)
-  }
   useEffect(() => {
-    fetchStateData()
-  }, [])
+    let isMounted = true;
+    async function fetchStateData() {
+      const response = await covidCasesByState('WI');
+      if (isMounted) {
+        setStateData(response);
+      }
+    }
+    fetchStateData();
+    return () => {isMounted = false;};
+  }, []);
 
   const [localData, setLocalData] = useState(null)
 
-  async function fetchLocalData() {
-    const response = await covidCasesByZipcode(53703)
-    setLocalData(response)
-  }
   useEffect(() => {
-    fetchLocalData()
-  }, [])
+    let isMounted = true;
+    async function fetchLocalData() {
+      const response = await covidCasesByZipcode(53703, 7, true);
+      if (isMounted) {
+        setLocalData(response);
+      }
+    }
+    fetchLocalData();
+    return () => {isMounted = false;};
+  }, []);
 
   if (!stateData || !localData) {
     return (
