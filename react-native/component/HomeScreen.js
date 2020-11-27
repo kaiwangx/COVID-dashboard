@@ -49,7 +49,7 @@ export default function HomeScreen() {
   const [localData, setLocalData] = useState(null)
 
   async function fetchLocalData() {
-    const response = await covidCasesByZipcode(53703, 7, true)
+    const response = await covidCasesByZipcode(53703)
     setLocalData(response)
   }
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function HomeScreen() {
       <ScrollView>
         <BarChart data={stateData} numDays={7} style={styles.container} />
         <LineGraph
-          data={localData}
+          data={addRateOfChange(['deathCt', 'positiveCt'], localData)}
           x="date"
           yTitles={['Death', 'Positive']}
           yKeys={['deathCtROC', 'positiveCtROC']}

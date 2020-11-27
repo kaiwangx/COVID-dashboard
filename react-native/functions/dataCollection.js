@@ -32,7 +32,7 @@ async function _refreshZipcodeData(zipCode){
         zipCode + '&daysInPast=7'
     );
     const dirtyResponse = await response.json();
-    const data = _cleanDate(dirtyResponse.counties[0].historicData);
+    const data = dirtyResponse.counties[0].historicData;
 
     /// Update cache
     const currentDate = new Date().setHours(0,0,0,0);
@@ -115,7 +115,7 @@ export async function covidCasesByZipcode(zipCode, numberOfDays = 7) {
 
   // Get currently stored data
   let data = await _getAsyncCovidData('CovidCasesByZipcode', zipCode);
-
+  
   // If the required data is not stored
   if( !data ){
     data = await _refreshZipcodeData(zipCode);

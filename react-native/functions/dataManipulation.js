@@ -10,11 +10,12 @@
 export function addRateOfChange( keys, data ) {
   keys.forEach((key) => {
     for (let i = 0; i < data.length - 1; i++) {
-      data[i][key + 'ROC'] = data[i][key] - data[i + 1][key];
+      let rateOfChange = data[i][key] - data[i + 1][key];
+      data[i][key + 'ROC'] = rateOfChange;
     }
   })
-
-  return data;
+  
+  return data.slice(0, -1);
 }
 
 /**
