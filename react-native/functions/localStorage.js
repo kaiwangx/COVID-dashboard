@@ -9,7 +9,7 @@ async function retrieveData(key) {
     if (value !== null) {
       return value
     } else {
-      console.log('No data at this key!')
+      console.log('No data at: \"' + key + "\"")
     }
   } catch (error) {
     console.log(error)
@@ -30,7 +30,7 @@ async function storeData(key, item) {
 /**
  * Remove key value pair from the local storage
  */
-async function removeData(key, item) {
+async function removeData(key) {
   try {
     await AsyncStorage.removeItem(key)
     console.log(key + 'removed')
