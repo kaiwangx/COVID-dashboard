@@ -10,24 +10,19 @@ import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import SymptomChecker from './component/SymptomChecker'
-import AuthContext from './component/context/AuthContext.js';
-import * as TaskManager from 'expo-task-manager';
+import TokenContext from './component/context/TokenContext.js'
+import AuthContext from './component/context/AuthContext.js'
+import {
+  retrieveData,
+  storeData,
+  removeData,
+} from './functions/localStorage.js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { loginWithToken, getCurrentUser, saveUsersLocations } from './functions/backend'
-import { backgroundLocationTask, addLocationTask } from './functions/location.js'
-
-
-
-TaskManager.defineTask("BackgroundLocationTracker", backgroundLocationTask);
-addLocationTask();
-saveUsersLocations();
+import { loginWithToken, getCurrentUser } from './functions/backend'
 
 const Tab = createBottomTabNavigator()
 
 export default function App() {
-
-  
-
   /*
   Parse.setAsyncStorage(AsyncStorage)
   Parse.initialize(

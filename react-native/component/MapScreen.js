@@ -1,49 +1,9 @@
 import { PROVIDER_GOOGLE, Heatmap } from 'react-native-maps'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import MapView from 'react-native-maps'
-import { StyleSheet, View, Dimensions,Text } from 'react-native'
-import { getUserLocations } from '../functions/backend.js'
+import { StyleSheet, View, Dimensions } from 'react-native'
 
 export default function MapScreen() {
-
-  const [mapPoints, setMapPoints] = useState([]);
-
-  useEffect(() => {
-
-    // Fetch map locations
-    const getMapPoints = async () => {
-
-      const mapLocations = await getUserLocations();
-
-      const weightedPoints = mapLocations.map(location => {
-
-        // Parse.Object to JSON
-        let locationJSON = location.toJSON()
-
-        // Add weight remove unessecary stuff
-        locationJSON['weight'] = 1;
-        delete locationJSON['createdAt']
-        delete locationJSON['objectId']
-        delete locationJSON['updatedAt'];
-        delete locationJSON['timestamp']
-
-        return locationJSON;
-      })
-      
-      setMapPoints(weightedPoints);
-    }
-    
-    getMapPoints();
-  }, [])
-
-  if(mapPoints.length == 0){
-    return(
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    )
-  }
-  console.log(mapPoints)
   return (
     <View style={styles.container}> 
       <MapView  
@@ -59,7 +19,7 @@ export default function MapScreen() {
         >
 
         <MapView.Heatmap 
-          points={mapPoints}
+          points={points}
           opacity={1}
           radius={50}
           maxIntensity={100}
@@ -100,7 +60,10 @@ let points = [{latitude: 43.073540, longitude: -89.396820, weight: 1},
   {latitude: 43.075630, longitude: -89.397141, weight: 1},
   {latitude: 43.075630, longitude: -89.397141, weight: 1},
   {latitude: 43.075630, longitude: -89.397141, weight: 1},
+
+
 ];
+
 
 
 
