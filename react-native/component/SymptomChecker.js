@@ -47,6 +47,18 @@ export default function SymptomChecker(props) {
     addEvidence()
   }, [response])
 
+  function reset() {
+    updateResponse(null)
+    setLoading(true)
+    setPatient({
+      sex: 'male',
+      age: 20,
+      evidence: [],
+    })
+    updateResult(null)
+    setNewQuestionStartIndex(0)
+  }
+
   function diagnosis(obj) {
     fetch('https://api.infermedica.com/covid19/diagnosis', {
       method: 'POST',
@@ -134,6 +146,14 @@ export default function SymptomChecker(props) {
     )
   }
 
+  function StartOverButton() {
+    return (
+      <View style={styles.loginButton}>
+        <Button title="Start over" onPress={() => reset()} />
+      </View>
+    )
+  }
+
   function GroupedSingleQuestion(props) {
     return (
       <View style={styles.container}>
@@ -163,6 +183,7 @@ export default function SymptomChecker(props) {
           </Picker>
         </View>
         <NextButton />
+        <StartOverButton />
       </View>
     )
   }
@@ -208,6 +229,7 @@ export default function SymptomChecker(props) {
           </View>
         ))}
         <NextButton />
+        <StartOverButton />
       </View>
     )
   }
@@ -224,6 +246,7 @@ export default function SymptomChecker(props) {
         <View style={styles.text}>
           <Text>{result['description']}</Text>
         </View>
+        <StartOverButton />
       </View>
     ) : (
       <View style={styles.container}>
