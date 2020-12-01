@@ -16,6 +16,7 @@ export default function SymptomChecker(props) {
     evidence: [],
   })
   const [newQuestionStartIndex, setNewQuestionStartIndex] = useState(0)
+  const [result, updateResult] = useState(null)
 
   // console.log(patient)
   // console.log(response)
@@ -28,16 +29,20 @@ export default function SymptomChecker(props) {
         return
       }
       const question = response['question']
-      if (question['type'] == 'group_single ') {
+      var newEvidence = patient['evidence']
+      setNewQuestionStartIndex(newEvidence.length)
+      if (question['type'] == 'group_single') {
+        newEvidence.push({
+          id: question['items'][0]['id'],
+          choice_id: 'present',
+        })
       } else {
-        var newEvidence = patient['evidence']
-        setNewQuestionStartIndex(newEvidence.length)
         for (const q of question['items']) {
-          newEvidence.push({ id: q['id'], choice_id: q['choices'][0]['id'] })
+          newEvidence.push({ id: q['id'], choice_id: q['choices'][1]['id'] })
         }
-        setPatient({ ...patient, evidence: newEvidence })
-        setLoading(false)
       }
+      setPatient({ ...patient, evidence: newEvidence })
+      setLoading(false)
     }
     addEvidence()
   }, [response])
@@ -58,6 +63,25 @@ export default function SymptomChecker(props) {
         // console.log(data)
         setLoading(true)
         updateResponse(data)
+      })
+  }
+
+  function getResult(obj) {
+    fetch('https://api.infermedica.com/covid19/triage', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'App-Id': settings['app-id'],
+        'App-Key': settings['app-key'],
+      },
+      body: JSON.stringify(obj),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data)
+        // setLoading(true)
+        updateResult(data)
       })
   }
 
@@ -110,18 +134,37 @@ export default function SymptomChecker(props) {
     )
   }
 
-  function getSelectedValue(choiceId, choices) {
-    // console.log(choices)
-    for (const c of choices) {
-      if (c['id'] == choiceId) {
-        return c['label']
-      }
-    }
-    console.log('error in getSelectedValue')
-  }
-
-  function GroupedSingleQuestion() {
-    return <></>
+  function GroupedSingleQuestion(props) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.title}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+            Choose one of the following
+          </Text>
+        </View>
+        <View style={{ marginLeft: 20 }}>
+          <Picker
+            style={{ height: 60, width: 380 }}
+            selectedValue={patient.evidence[newQuestionStartIndex]['id']}
+            onValueChange={(itemValue, itemIndex) => {
+              var newEvidence = patient['evidence']
+              newEvidence[newQuestionStartIndex]['id'] = itemValue
+              // newEvidence[newQuestionStartIndex]['choice_id'] = 'present'
+              setPatient({ ...patient, evidence: newEvidence })
+            }}
+          >
+            {props.question['items'].map((symptom, j) => (
+              <Picker.Item
+                key={j}
+                label={symptom['name']}
+                value={symptom['id']}
+              />
+            ))}
+          </Picker>
+        </View>
+        <NextButton />
+      </View>
+    )
   }
 
   function GroupedMulQuestion(props) {
@@ -129,6 +172,11 @@ export default function SymptomChecker(props) {
     // console.log(patient.evidence)
     return (
       <View style={styles.container}>
+        <View style={styles.title}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+            {props.question['text']}
+          </Text>
+        </View>
         {props.question['items'].map((item, i) => (
           <View key={i}>
             <View style={styles.text}>
@@ -165,11 +213,32 @@ export default function SymptomChecker(props) {
   }
 
   function Result() {
-    return <></>
+    // console.log(result)
+    return result ? (
+      <View style={styles.container}>
+        <View style={styles.title}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+            {result['label']}
+          </Text>
+        </View>
+        <View style={styles.text}>
+          <Text>{result['description']}</Text>
+        </View>
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <View>
+          <Text>Loading</Text>
+        </View>
+      </View>
+    )
   }
 
   function FollowUp() {
     if (response['should_stop']) {
+      if (!result) {
+        getResult(patient)
+      }
       return <Result />
     }
     if (loading) {
@@ -211,6 +280,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    marginLeft: 20,
+    marginRight: 20,
     marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
