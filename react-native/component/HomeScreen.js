@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { Card } from 'react-native-elements'
 import {
   covidCasesByZipcode,
   covidCasesByState,
 } from '../functions/dataCollection.js'
-import { weekOverMonthAverage } from '../functions/dataManipulation.js'
+import { weekOverWeek, addRateOfChange } from '../functions/dataManipulation.js'
 import BarChart from './BarChart'
 import LineGraph from './LineGraph'
 import ScatterPlot from './ScatterPlot'
@@ -51,11 +52,11 @@ export default function HomeScreen() {
   }, []);
 
   const [localData, setLocalData] = useState(null)
-
+  
   useEffect(() => {
     let isMounted = true;
     async function fetchLocalData() {
-      const response = await covidCasesByZipcode(53703, 7, true);
+      const response = await covidCasesByZipcode(53703);
       if (isMounted) {
         setLocalData(response);
       }
@@ -71,22 +72,20 @@ export default function HomeScreen() {
       </View>
     )
   }
-
-  const change = weekOverMonthAverage(stateData, 'deathROC')
+  
+  const change = weekOverWeek(stateData, 'death')
   const percentChange = (change * 100).toFixed(2)
 
   return (
     <>
-      <Text style={{ textAlign: 'center', fontSize: 24 }}>Hello Guest!</Text>
       <ScrollView>
-        <BarChart data={stateData} numDays={7} style={styles.container} />
+        <BarChart data={stateData} numDays={7}/>
         <LineGraph
-          data={localData}
+          data={addRateOfChange(['deathCt', 'positiveCt'], localData)}
           x="date"
           yTitles={['Death', 'Positive']}
           yKeys={['deathCtROC', 'positiveCtROC']}
           colors={['#000000', '#FF2D00']}
-          style={styles.container}
         />
         <ScatterPlot
           data={stateData}
@@ -94,12 +93,10 @@ export default function HomeScreen() {
           yTitles={['Death', 'Positive']}
           yKeys={['death', 'positive']}
           colors={['#000000', '#FF2D00']}
-          style={styles.container}
         />
         <Statistic
           title="State Death Rate Change"
           data={percentChange + '%'}
-          style={styles.container}
         />
       </ScrollView>
     </>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel, VictoryStack, VictoryLegend } from 'victory-native'
+import { InfoCard } from './InfoCard';
 
 export default function BarChart(props) {
     const { data, numDays, style } = props;
@@ -27,9 +28,9 @@ export default function BarChart(props) {
         return "";
     };
     return (
-        <View style={style}>
+        <InfoCard title={data[0].state + " Cases over Past " + numDays + " Days"}>
             <VictoryChart domainPadding={15}>
-                <VictoryLabel text={data[0].state + " Cases over Past " + numDays + " Days"} 
+                <VictoryLabel 
                     textAnchor="middle" x={150} y={20} style={[{fontSize: 24}]}
                 />
                 <VictoryAxis tickFormat={xticks} />
@@ -41,6 +42,6 @@ export default function BarChart(props) {
                 <VictoryLegend x={290} colorScale={["red", "gray"]} 
                     data={[{name: "+ Increase"}, {name: "- Increase"}]}/>
             </VictoryChart>
-        </View>
+        </InfoCard>
     );
 }

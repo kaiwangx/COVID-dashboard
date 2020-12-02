@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import { InfoCard } from './InfoCard';
 
 const Statistic = (props) => {
     const { title, data, style} = props;
@@ -9,14 +10,11 @@ const Statistic = (props) => {
     }
   
     return (
-        <View style={style}>
-            <Text style={{ fontSize: 24, }}>
-                {title} 
-            </Text>
-            <Text style={{ fontSize: 60, }}>
+        <InfoCard title={title}>
+            <Text style={{ fontSize: 60, textAlign: "center"  }}>
                 {data}
             </Text>
-        </View>
+        </InfoCard>
     )
 };
 
