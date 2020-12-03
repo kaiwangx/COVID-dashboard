@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryLabel } from 'victory-native'
 import { ButtonGroup } from 'react-native-elements'
+import { InfoCard } from "./InfoCard"
 
 const LineGraph = (props) => {
     const { data, x, yTitles, yKeys, colors, style } = props;
@@ -40,15 +41,15 @@ const LineGraph = (props) => {
     );
 
     return (
-        <View style={style}>
+        <InfoCard title={"Local COVID Cases"}>
             <VictoryChart theme={VictoryTheme.material} domainPadding={15}>
-                <VictoryLabel text="Local COVID Cases" textAnchor="middle" x={200} y={30} style={[{fontSize: 24}]}/>
+                <VictoryLabel textAnchor="middle" x={200} y={30} style={[{fontSize: 24}]}/>
                 <VictoryAxis fixLabelOverlap={true} />
                 <VictoryAxis dependentAxis />
                 {plots}
             </VictoryChart>
             {yTitles.length > 1 && buttons}
-        </View>
+        </InfoCard>
     );
 };
 

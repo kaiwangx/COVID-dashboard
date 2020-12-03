@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import { VictoryChart, VictoryScatter, VictoryTheme, VictoryAxis, VictoryLabel } from 'victory-native'
 import { ButtonGroup } from 'react-native-elements'
+import { InfoCard } from './InfoCard'
 
 const ScatterPlot = (props) => {
     const {data, x, yTitles, yKeys, colors, style} = props;
@@ -40,7 +41,7 @@ const ScatterPlot = (props) => {
     );
 
     return (
-        <View style={style}>
+        <InfoCard title={"State COVID Cases"}>
             <VictoryChart theme={VictoryTheme.material} domainPadding={15}>
                 <VictoryLabel text="State COVID Cases" textAnchor="middle" x={200} y={30} style={[{fontSize: 24}]}/>
                 <VictoryAxis fixLabelOverlap={true}/>
@@ -48,7 +49,7 @@ const ScatterPlot = (props) => {
                 {plots}
             </VictoryChart>
             {yTitles.length > 1 && buttons}
-        </View>
+        </InfoCard>
     );
 };
 
