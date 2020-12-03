@@ -250,7 +250,7 @@ export default function SymptomChecker(props) {
       </View>
     ) : (
       <View style={styles.container}>
-        <View>
+        <View style={styles.title}>
           <Text>Loading</Text>
         </View>
       </View>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 10,
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
