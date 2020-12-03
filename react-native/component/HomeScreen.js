@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import LocalInfo from './LocalInfo'
 import StateInfo from './StateInfo.js'
 
@@ -37,7 +37,6 @@ export default function HomeScreen() {
 
     return (
         <>
-            <Text style={{ textAlign: 'center', fontSize: 24 }}>Hello Guest!</Text>
             <ScrollView>
                 <LocalInfo zipcode={zipcode} styles={styles} numDays={localNumDays}/>
                 <StateInfo state={state} styles={styles} numDays={stateNumDays}/>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native'
 import useData from '../functions/useData.js'
 import { covidCasesByZipcode } from '../functions/dataCollection.js'
+import { TitleCard, InfoCard } from '../component/InfoCards'
 import BarChart from './BarChart'
 import Statistic from './Statistic.js';
 
@@ -30,14 +31,17 @@ export default function LocalInfo(props) {
     }
 
     return (
-        <View style={styles.separator}>
-            <Text style={{ textAlign: 'center', fontSize: 28 }}> Info for {zipcode} </Text>
-            <Statistic
-                title={"Number of Deaths from\n" + deathData[0].x + " to " + deathData[deathData.length - 1].x + ":"}
-                data={deathData[deathData.length - 1].y - deathData[0].y}
-                style={styles.container}
-            />
-            <BarChart data={positiveChangeData} title="Positive Cases Increase" styles={styles}/>
-        </View>
+        <>
+            <TitleCard>Local: {zipcode}</TitleCard>
+            <InfoCard title={"Number of Deaths from\n" + deathData[0].x + " to " + deathData[deathData.length - 1].x + ":"}>
+                <Statistic
+                    data={deathData[deathData.length - 1].y - deathData[0].y}
+                    style={styles.container}
+                />
+            </InfoCard>
+            <InfoCard title={"Positive Cases Increase"}>
+                <BarChart data={positiveChangeData} styles={styles}/>
+            </InfoCard>
+        </>
     );
 }

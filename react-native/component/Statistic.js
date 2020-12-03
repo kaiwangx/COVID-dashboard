@@ -9,14 +9,9 @@ const Statistic = (props) => {
     }
   
     return (
-        <View style={style}>
-            <Text style={{ fontSize: 24, }}>
-                {title} 
-            </Text>
-            <Text style={{ fontSize: 60, }}>
-                {data}
-            </Text>
-        </View>
+        <Text style={{ fontSize: 60, textAlign: "center"  }}>
+            {data}
+        </Text>
     )
 };
 

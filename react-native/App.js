@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Parse from 'parse/react-native.js'
+import { AppHeader }  from './component/AppHeader'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
@@ -87,48 +88,51 @@ export default function App() {
 
   function HomeTabNavigation() {
     return (
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName
+      <>
+        <AppHeader title={"MyCovid"}/>
+        <Tab.Navigator
+          initialRouteName="Home"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName
 
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline'
-            } else if (route.name === 'Settings') {
-              iconName = 'settings'
-              return <MaterialIcons name={iconName} size={size} color={color} />
-            } else if (route.name === 'Map') {
-              iconName = focused ? 'map' : 'map-outline'
-              return (
-                <MaterialCommunityIcons
-                  name={iconName}
-                  size={size}
-                  color={color}
-                />
-              )
-            } else if (route.name === 'Symptoms Checker') {
-              iconName = focused ? 'ios-list-box' : 'ios-list'
-            }
+              if (route.name === 'Home') {
+                iconName = focused
+                  ? 'ios-information-circle'
+                  : 'ios-information-circle-outline'
+              } else if (route.name === 'Settings') {
+                iconName = 'settings'
+                return <MaterialIcons name={iconName} size={size} color={color} />
+              } else if (route.name === 'Map') {
+                iconName = focused ? 'map' : 'map-outline'
+                return (
+                  <MaterialCommunityIcons
+                    name={iconName}
+                    size={size}
+                    color={color}
+                  />
+                )
+              } else if (route.name === 'Symptoms Checker') {
+                iconName = focused ? 'ios-list-box' : 'ios-list'
+              }
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Symptoms Checker" component={SymptomChecker} />
-        <Tab.Screen name="Settings">
-          {(props) => <SettingsScreen {...props} isSignin={state.isSignin} />}
-        </Tab.Screen>
-      </Tab.Navigator>
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+          }}
+        >
+          <Tab.Screen name="Map" component={MapScreen} />
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Symptoms Checker" component={SymptomChecker} />
+          <Tab.Screen name="Settings">
+            {(props) => <SettingsScreen {...props} isSignin={state.isSignin} />}
+          </Tab.Screen>
+        </Tab.Navigator>
+      </>
     )
   }
 
