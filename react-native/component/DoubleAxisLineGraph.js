@@ -18,7 +18,7 @@ export default function DALineGraph(props){
 
     return (
         <VictoryChart
-            width={400} height={400} domain={{ y: [0, 1] }}
+            domain={{ y: [0, 1] }}
         >
             <VictoryAxis fixLabelOverlap />
                 {data.map((d, i) => (

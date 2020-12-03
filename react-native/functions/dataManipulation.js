@@ -8,14 +8,19 @@
  * @param {Array} data Array of Json data
  */
 export function addRateOfChange( keys, data ) {
+
+  // Sort the data so we know what we are working with
+  const sortedData = data.sort((a, b) => (a.date > b.date) ? -1 : 1)
+
+  // Add ROC attribute for all indicated keys
   keys.forEach((key) => {
-    for (let i = 0; i < data.length - 1; i++) {
-      let rateOfChange = data[i][key] - data[i + 1][key];
-      data[i][key + 'ROC'] = rateOfChange;
+    for (let i = 0; i < sortedData.length - 1; i++) {
+      let rateOfChange = sortedData[i][key] - sortedData[i + 1][key];
+      sortedData[i][key + 'ROC'] = rateOfChange;
     }
   })
   
-  return data.slice(0, -1);
+  return sortedData.slice(0, -1);
 }
 
 /**
