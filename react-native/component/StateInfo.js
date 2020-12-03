@@ -27,18 +27,11 @@ export default function StateInfo(props) {
     const datasets = [positiveIncData, negativeIncData];
 
     return (
-<<<<<<< HEAD
-        <View style={styles.separator}>
-            <Text style={{ textAlign: 'center', fontSize: 28 }}> Info for {state} </Text>
-            <DALineGraph data={datasets} title={"Cases over the Last " + numDays + " Days"} />
-        </View>
-=======
         <>
             <TitleCard> State: {state} </TitleCard>
             <InfoCard title={"Positive Cases vs. Death"}>
-                <DALineGraph data={datasets} />
+                <DALineGraph data={datasets} title={"Cases over the Last " + numDays + " Days"} />
             </InfoCard>
         </>
->>>>>>> c6f22883381e909cd5f9c952a08eb99121a59f48
     );
 }
