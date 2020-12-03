@@ -30,6 +30,7 @@ const titleCardStyles = {
     shadowOpacity: .5,
     shadowRadius: 5,  
     elevation: 5,
+    backgroundColor : '#fcc9c0'
   },
   'title' : {
     padding: 5,

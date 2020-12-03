@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native'
+import { Icon } from 'react-native-elements'
 import useData from '../functions/useData.js'
 import { covidCasesByZipcode } from '../functions/dataCollection.js'
 import { TitleCard, InfoCard } from '../component/InfoCards'
@@ -33,7 +34,7 @@ export default function LocalInfo(props) {
     return (
         <>
             <TitleCard>Local: {zipcode}</TitleCard>
-            <InfoCard title={"Number of Deaths from\n" + deathData[0].x + " to " + deathData[deathData.length - 1].x + ":"}>
+            <InfoCard title={"Deaths this Week:"}>
                 <Statistic
                     data={deathData[deathData.length - 1].y - deathData[0].y}
                     style={styles.container}

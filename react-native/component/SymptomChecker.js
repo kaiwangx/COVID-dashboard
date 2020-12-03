@@ -101,8 +101,8 @@ export default function SymptomChecker(props) {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            Symtom Checker
+          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+            Symptom Checker
           </Text>
         </View>
         <View style={styles.text}>
@@ -141,7 +141,7 @@ export default function SymptomChecker(props) {
   function NextButton() {
     return (
       <View style={styles.loginButton}>
-        <Button title="Next" onPress={() => diagnosis(patient)} />
+        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Next" onPress={() => diagnosis(patient)} />
       </View>
     )
   }
@@ -149,7 +149,7 @@ export default function SymptomChecker(props) {
   function StartOverButton() {
     return (
       <View style={styles.loginButton}>
-        <Button title="Start over" onPress={() => reset()} />
+        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Start over" onPress={() => reset()} />
       </View>
     )
   }
@@ -324,6 +324,15 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 10,
     marginBottom: 20,
+  },
+
+  button : {
+    backgroundColor : '#fcc9c0',
+  },
+
+  buttonTitle : {
+    color : '#000',
+    fontSize: 18
   },
 
   text_link: {
