@@ -29,8 +29,8 @@ export default function StateInfo(props) {
     return (
         <>
             <TitleCard> State: {state} </TitleCard>
-            <InfoCard title={"Positive Cases vs. Death"}>
-                <DALineGraph data={datasets} title={"Cases over the Last " + numDays + " Days"} />
+            <InfoCard title={"Cases over the Last " + numDays + " Days"}>
+                <DALineGraph data={datasets} />
             </InfoCard>
         </>
     );

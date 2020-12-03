@@ -2,7 +2,7 @@ import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryLine, VictoryLabel, VictoryGroup, VictoryLegend } from 'victory-native'
 
 export default function DALineGraph(props){
-    const { data, title } = props;
+    const { data } = props;
     // code based on
     // https://formidable.com/open-source/victory/gallery/multiple-dependent-axes/
 
@@ -11,19 +11,22 @@ export default function DALineGraph(props){
         (dataset) => Math.max(...dataset.map((d) => d.y))
     );
 
-    const xOffsets = [50, 350];
+    const xOffsets = [50, 335];
     const tickPadding = [ 0, -15 ];
     const anchors = ["end", "start"];
     const colors = ["red", "gray"];
 
+    const xticks = (xtick) => {
+        if (xtick == data[0][0].x || xtick == data[0][data[0].length - 1].x) {
+            return xtick;
+        }
+        return "";
+    };
     return (
         <VictoryChart
-            width={400} height={400} domain={{ y: [0, 1] }}
+            width={385} height={400} domain={{ y: [0, 1] }}
         >
-            <VictoryLabel text={title} 
-                textAnchor="middle" x={200} y={20} style={[{fontSize: 24}]}
-            />
-            <VictoryAxis fixLabelOverlap />
+            <VictoryAxis tickFormat={xticks} />
                 {data.map((d, i) => (
                     <VictoryAxis dependentAxis
                         key={i}
@@ -49,6 +52,8 @@ export default function DALineGraph(props){
                         />
                     ))}
                 </VictoryGroup>
+            <VictoryLegend x={230} colorScale={["red", "gray"]} 
+                data={[{name: "+ Increase"}, {name: "- Increase"}]}/>
         </VictoryChart>
     );
 }
