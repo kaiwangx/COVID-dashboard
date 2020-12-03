@@ -28,7 +28,7 @@ export default function StateInfo(props) {
     return (
         <View style={styles.separator}>
             <Text style={{ textAlign: 'center', fontSize: 28 }}> Info for {state} </Text>
-            <DALineGraph data={datasets} />
+            <DALineGraph data={datasets} title={"Cases over the Last " + numDays + " Days"} />
         </View>
     );
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryLine, VictoryLabel, VictoryGroup, VictoryLegend } from 'victory-native'
 
 export default function DALineGraph(props){
-    const { data } = props;
+    const { data, title } = props;
     // code based on
     // https://formidable.com/open-source/victory/gallery/multiple-dependent-axes/
 
@@ -20,6 +20,9 @@ export default function DALineGraph(props){
         <VictoryChart
             width={400} height={400} domain={{ y: [0, 1] }}
         >
+            <VictoryLabel text={title} 
+                textAnchor="middle" x={200} y={20} style={[{fontSize: 24}]}
+            />
             <VictoryAxis fixLabelOverlap />
                 {data.map((d, i) => (
                     <VictoryAxis dependentAxis
@@ -33,7 +36,7 @@ export default function DALineGraph(props){
                         // Use normalized tickValues (0 - 1)
                         tickValues={[0, 0.25, 0.5, 0.75, 1]}
                         // Re-scale ticks by multiplying by correct maxima
-                        tickFormat={(t) => t * maxima[i]}
+                        tickFormat={(t) => (t * maxima[i] / 1000).toPrecision(2) + "k"}
                     />
                 ))}
                 <VictoryGroup offset={22} colorScale={colors}>
