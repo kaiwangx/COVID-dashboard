@@ -18,7 +18,7 @@ export default function SymptomChecker(props) {
   const [newQuestionStartIndex, setNewQuestionStartIndex] = useState(0)
   const [result, updateResult] = useState(null)
 
-  // console.log(patient)
+  console.log(patient)
   // console.log(response)
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
@@ -98,6 +98,7 @@ export default function SymptomChecker(props) {
   }
 
   function SetAgeAndGender() {
+    const [age, setAge] = useState(20)
     return (
       <View style={styles.container}>
         <View style={styles.title}>
@@ -111,9 +112,7 @@ export default function SymptomChecker(props) {
         <View style={styles.input}>
           <Input
             placeholder={'20'}
-            onChangeText={(value) =>
-              setPatient({ ...patient, age: parseFloat(value) })
-            }
+            onChangeText={(value) => setAge(parseFloat(value))}
           />
         </View>
 
@@ -133,7 +132,17 @@ export default function SymptomChecker(props) {
           </Picker>
         </View>
 
-        <NextButton />
+        <View style={styles.loginButton}>
+          <Button
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonTitle}
+            title="Next"
+            onPress={() => {
+              setPatient({ ...patient, age: age })
+              diagnosis(patient)
+            }}
+          />
+        </View>
       </View>
     )
   }
@@ -141,7 +150,12 @@ export default function SymptomChecker(props) {
   function NextButton() {
     return (
       <View style={styles.loginButton}>
-        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Next" onPress={() => diagnosis(patient)} />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonTitle}
+          title="Next"
+          onPress={() => diagnosis(patient)}
+        />
       </View>
     )
   }
@@ -149,7 +163,12 @@ export default function SymptomChecker(props) {
   function StartOverButton() {
     return (
       <View style={styles.loginButton}>
-        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Start over" onPress={() => reset()} />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonTitle}
+          title="Start over"
+          onPress={() => reset()}
+        />
       </View>
     )
   }
@@ -157,33 +176,35 @@ export default function SymptomChecker(props) {
   function GroupedSingleQuestion(props) {
     return (
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            Choose one of the following
-          </Text>
-        </View>
-        <View style={{ marginLeft: 20 }}>
-          <Picker
-            style={{ height: 60, width: 380 }}
-            selectedValue={patient.evidence[newQuestionStartIndex]['id']}
-            onValueChange={(itemValue, itemIndex) => {
-              var newEvidence = patient['evidence']
-              newEvidence[newQuestionStartIndex]['id'] = itemValue
-              // newEvidence[newQuestionStartIndex]['choice_id'] = 'present'
-              setPatient({ ...patient, evidence: newEvidence })
-            }}
-          >
-            {props.question['items'].map((symptom, j) => (
-              <Picker.Item
-                key={j}
-                label={symptom['name']}
-                value={symptom['id']}
-              />
-            ))}
-          </Picker>
-        </View>
-        <NextButton />
-        <StartOverButton />
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.title}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+              Choose one of the following
+            </Text>
+          </View>
+          <View style={{ marginLeft: 20 }}>
+            <Picker
+              style={{ height: 60, width: 380 }}
+              selectedValue={patient.evidence[newQuestionStartIndex]['id']}
+              onValueChange={(itemValue, itemIndex) => {
+                var newEvidence = patient['evidence']
+                newEvidence[newQuestionStartIndex]['id'] = itemValue
+                // newEvidence[newQuestionStartIndex]['choice_id'] = 'present'
+                setPatient({ ...patient, evidence: newEvidence })
+              }}
+            >
+              {props.question['items'].map((symptom, j) => (
+                <Picker.Item
+                  key={j}
+                  label={symptom['name']}
+                  value={symptom['id']}
+                />
+              ))}
+            </Picker>
+          </View>
+          <NextButton />
+          <StartOverButton />
+        </ScrollView>
       </View>
     )
   }
@@ -193,43 +214,45 @@ export default function SymptomChecker(props) {
     // console.log(patient.evidence)
     return (
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            {props.question['text']}
-          </Text>
-        </View>
-        {props.question['items'].map((item, i) => (
-          <View key={i}>
-            <View style={styles.text}>
-              <Text>{item['name']}</Text>
-            </View>
-            <View style={{ marginLeft: 20 }}>
-              <Picker
-                style={{ height: 60, width: 380 }}
-                selectedValue={
-                  patient.evidence[newQuestionStartIndex + i]['choice_id']
-                }
-                onValueChange={(itemValue, itemIndex) => {
-                  var newEvidence = patient['evidence']
-                  newEvidence[newQuestionStartIndex + i][
-                    'choice_id'
-                  ] = itemValue
-                  setPatient({ ...patient, evidence: newEvidence })
-                }}
-              >
-                {item['choices'].map((choice, j) => (
-                  <Picker.Item
-                    key={j}
-                    label={choice['label']}
-                    value={choice['id']}
-                  />
-                ))}
-              </Picker>
-            </View>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.title}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+              {props.question['text']}
+            </Text>
           </View>
-        ))}
-        <NextButton />
-        <StartOverButton />
+          {props.question['items'].map((item, i) => (
+            <View key={i}>
+              <View style={styles.text}>
+                <Text>{item['name']}</Text>
+              </View>
+              <View style={{ marginLeft: 20 }}>
+                <Picker
+                  style={{ height: 60, width: 380 }}
+                  selectedValue={
+                    patient.evidence[newQuestionStartIndex + i]['choice_id']
+                  }
+                  onValueChange={(itemValue, itemIndex) => {
+                    var newEvidence = patient['evidence']
+                    newEvidence[newQuestionStartIndex + i][
+                      'choice_id'
+                    ] = itemValue
+                    setPatient({ ...patient, evidence: newEvidence })
+                  }}
+                >
+                  {item['choices'].map((choice, j) => (
+                    <Picker.Item
+                      key={j}
+                      label={choice['label']}
+                      value={choice['id']}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+          ))}
+          <NextButton />
+          <StartOverButton />
+        </ScrollView>
       </View>
     )
   }
@@ -326,13 +349,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  button : {
-    backgroundColor : '#fcc9c0',
+  button: {
+    backgroundColor: '#fcc9c0',
   },
 
-  buttonTitle : {
-    color : '#000',
-    fontSize: 18
+  buttonTitle: {
+    color: '#000',
+    fontSize: 18,
   },
 
   text_link: {
