@@ -6,6 +6,7 @@ import RNMultiSelect, {
 } from '@freakycoder/react-native-multiple-select'
 import settings from './infermedica/setting'
 import { Picker } from '@react-native-picker/picker'
+import { AppHeader } from './AppHeader'
 
 export default function SymptomChecker(props) {
   const [response, updateResponse] = useState(null)
@@ -18,7 +19,7 @@ export default function SymptomChecker(props) {
   const [newQuestionStartIndex, setNewQuestionStartIndex] = useState(0)
   const [result, updateResult] = useState(null)
 
-  console.log(patient)
+  // console.log(patient)
   // console.log(response)
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
@@ -134,8 +135,8 @@ export default function SymptomChecker(props) {
 
         <View style={styles.loginButton}>
           <Button
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonTitle}
+            // buttonStyle={styles.button}
+            // titleStyle={styles.buttonTitle}
             title="Next"
             onPress={() => {
               setPatient({ ...patient, age: age })
@@ -151,8 +152,8 @@ export default function SymptomChecker(props) {
     return (
       <View style={styles.loginButton}>
         <Button
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonTitle}
+          // buttonStyle={styles.button}
+          // titleStyle={styles.buttonTitle}
           title="Next"
           onPress={() => diagnosis(patient)}
         />
@@ -164,8 +165,9 @@ export default function SymptomChecker(props) {
     return (
       <View style={styles.loginButton}>
         <Button
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonTitle}
+          // buttonStyle={styles.button}
+          // titleStyle={styles.buttonTitle}
+          type="outline"
           title="Start over"
           onPress={() => reset()}
         />
@@ -305,9 +307,13 @@ export default function SymptomChecker(props) {
   }
 
   return !response ? (
-    <SetAgeAndGender />
+    <>
+      <AppHeader title="Symptom Checker" />
+      <SetAgeAndGender />
+    </>
   ) : (
     <>
+      <AppHeader title="Interview" />
       <FollowUp />
     </>
   )
@@ -322,6 +328,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
+    marginTop: 40,
     marginBottom: 20,
   },
 

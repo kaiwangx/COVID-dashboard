@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Parse from 'parse/react-native.js'
-import { AppHeader }  from './component/AppHeader'
+import { AppHeader } from './component/AppHeader'
 import HomeScreen from './component/HomeScreen'
 import MapScreen from './component/MapScreen'
 import SettingsScreen from './component/SettingsScreen'
@@ -89,7 +89,7 @@ export default function App() {
   function HomeTabNavigation() {
     return (
       <>
-        <AppHeader title={"MyCovid"}/>
+        {/* <AppHeader title={"MyCovid"}/> */}
         <Tab.Navigator
           initialRouteName="Home"
           screenOptions={({ route }) => ({
@@ -102,7 +102,9 @@ export default function App() {
                   : 'ios-information-circle-outline'
               } else if (route.name === 'Settings') {
                 iconName = 'settings'
-                return <MaterialIcons name={iconName} size={size} color={color} />
+                return (
+                  <MaterialIcons name={iconName} size={size} color={color} />
+                )
               } else if (route.name === 'Map') {
                 iconName = focused ? 'map' : 'map-outline'
                 return (
