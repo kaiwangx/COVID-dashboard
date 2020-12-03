@@ -4,43 +4,22 @@ import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel, VictoryStack, Vict
 import { InfoCard } from './InfoCard';
 
 export default function BarChart(props) {
-    const { data, numDays, style } = props;
+    const { data, title, styles } = props;
 
     if (!data) {
         return <VictoryBar />;
     }
 
-    // assume data is ordered reverse chronologically 
-    let cleanData = data.map(row => {
-        return {"date": row.date, "positiveIncrease": row.positiveIncrease, 
-            "deathIncrease": row.deathIncrease, "negativeIncrease": row.negativeIncrease}}).slice(0, numDays);
-    // ymd???
-    cleanData.sort((a, b) => (a.date > b.date) ? 1 : -1);
-    for (let index = 0; index < cleanData.length; index++) {
-        cleanData[index].x = index + 1;
-    }
-    // console.log(cleanData);
-
-    const xticks = (x) => {
-        if (x == 1 || x == numDays) {
-            return cleanData[x - 1].date;
-        }
-        return "";
-    };
+    // const yAxisTickFormat = y => y / 1000 + "k"
     return (
         <InfoCard title={data[0].state + " Cases over Past " + numDays + " Days"}>
             <VictoryChart domainPadding={15}>
                 <VictoryLabel 
                     textAnchor="middle" x={150} y={20} style={[{fontSize: 24}]}
                 />
-                <VictoryAxis tickFormat={xticks} />
-                <VictoryAxis dependentAxis tickFormat={y => y / 1000 + "k"}/>
-                <VictoryStack colorScale={["red", "gray"]}>
-                    <VictoryBar data={cleanData} x="x" y="positiveIncrease"/> 
-                    <VictoryBar data={cleanData} x="x" y="negativeIncrease"/> 
-                </VictoryStack>
-                <VictoryLegend x={290} colorScale={["red", "gray"]} 
-                    data={[{name: "+ Increase"}, {name: "- Increase"}]}/>
+                <VictoryAxis fixLabelOverlap />
+                <VictoryAxis dependentAxis />
+                <VictoryBar data={data} />
             </VictoryChart>
         </InfoCard>
     );

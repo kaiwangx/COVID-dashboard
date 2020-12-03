@@ -1,104 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { Card } from 'react-native-elements'
-import {
-  covidCasesByZipcode,
-  covidCasesByState,
-} from '../functions/dataCollection.js'
-import { weekOverWeek, addRateOfChange } from '../functions/dataManipulation.js'
-import BarChart from './BarChart'
-import LineGraph from './LineGraph'
-import ScatterPlot from './ScatterPlot'
-import Statistic from './Statistic'
+import React from 'react'
+import { StyleSheet, Text, ScrollView } from 'react-native'
+import LocalInfo from './LocalInfo'
+import StateInfo from './StateInfo.js'
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#20232a',
-    borderRadius: 6,
-  },
-})
-
-const loadingStyle = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        margin: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#20232a',
+        borderRadius: 6,
+    },
+    loading: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    separator: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderTopWidth: 3,
+        borderBottomWidth: 3,
+        borderColor: "gray",
+    },
 })
 
 export default function HomeScreen() {
-  // prop?
-  // const state = "WI";
-  // const zipcode = 53703;
+    // props?
+    // retrieve from async storage or backend?
+    const state = "WI";
+    const stateNumDays = 31;
+    const zipcode = 53703;
+    const localNumDays = 7;
 
-  // data fetching code based on
-  // https://reactjs.org/docs/testing-recipes.html#data-fetching
-  const [stateData, setStateData] = useState(null)
-
-  useEffect(() => {
-    let isMounted = true;
-    async function fetchStateData() {
-      const response = await covidCasesByState('WI');
-      if (isMounted) {
-        setStateData(response);
-      }
-    }
-    fetchStateData();
-    return () => {isMounted = false;};
-  }, []);
-
-  const [localData, setLocalData] = useState(null)
-  
-  useEffect(() => {
-    let isMounted = true;
-    async function fetchLocalData() {
-      const response = await covidCasesByZipcode(53703);
-      if (isMounted) {
-        setLocalData(response);
-      }
-    }
-    fetchLocalData();
-    return () => {isMounted = false;};
-  }, []);
-
-  if (!stateData || !localData) {
     return (
-      <View style={loadingStyle.container}>
-        <Text>Loading...</Text>
-      </View>
+        <>
+            <Text style={{ textAlign: 'center', fontSize: 24 }}>Hello Guest!</Text>
+            <ScrollView>
+                <LocalInfo zipcode={zipcode} styles={styles} numDays={localNumDays}/>
+                <StateInfo state={state} styles={styles} numDays={stateNumDays}/>
+            </ScrollView>
+        </>
     )
-  }
-  
-  const change = weekOverWeek(stateData, 'death')
-  const percentChange = (change * 100).toFixed(2)
-
-  return (
-    <>
-      <ScrollView>
-        <BarChart data={stateData} numDays={7}/>
-        <LineGraph
-          data={addRateOfChange(['deathCt', 'positiveCt'], localData)}
-          x="date"
-          yTitles={['Death', 'Positive']}
-          yKeys={['deathCtROC', 'positiveCtROC']}
-          colors={['#000000', '#FF2D00']}
-        />
-        <ScatterPlot
-          data={stateData}
-          x="date"
-          yTitles={['Death', 'Positive']}
-          yKeys={['death', 'positive']}
-          colors={['#000000', '#FF2D00']}
-        />
-        <Statistic
-          title="State Death Rate Change"
-          data={percentChange + '%'}
-        />
-      </ScrollView>
-    </>
-  )
 }
