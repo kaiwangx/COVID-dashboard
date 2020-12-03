@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, ScrollView } from 'react-native'
+import React from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
 import LocalInfo from './LocalInfo'
 import StateInfo from './StateInfo.js'
 

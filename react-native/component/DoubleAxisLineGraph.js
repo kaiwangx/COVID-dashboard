@@ -11,16 +11,22 @@ export default function DALineGraph(props){
         (dataset) => Math.max(...dataset.map((d) => d.y))
     );
 
-    const xOffsets = [50, 350];
+    const xOffsets = [50, 335];
     const tickPadding = [ 0, -15 ];
     const anchors = ["end", "start"];
     const colors = ["red", "gray"];
 
+    const xticks = (xtick) => {
+        if (xtick == data[0][0].x || xtick == data[0][data[0].length - 1].x) {
+            return xtick;
+        }
+        return "";
+    };
     return (
         <VictoryChart
-            domain={{ y: [0, 1] }}
+            width={385} height={400} domain={{ y: [0, 1] }}
         >
-            <VictoryAxis fixLabelOverlap />
+            <VictoryAxis tickFormat={xticks} />
                 {data.map((d, i) => (
                     <VictoryAxis dependentAxis
                         key={i}
@@ -33,7 +39,7 @@ export default function DALineGraph(props){
                         // Use normalized tickValues (0 - 1)
                         tickValues={[0, 0.25, 0.5, 0.75, 1]}
                         // Re-scale ticks by multiplying by correct maxima
-                        tickFormat={(t) => t * maxima[i]}
+                        tickFormat={(t) => (t * maxima[i] / 1000).toPrecision(2) + "k"}
                     />
                 ))}
                 <VictoryGroup offset={22} colorScale={colors}>
@@ -46,6 +52,8 @@ export default function DALineGraph(props){
                         />
                     ))}
                 </VictoryGroup>
+            <VictoryLegend x={230} colorScale={["red", "gray"]} 
+                data={[{name: "+ Increase"}, {name: "- Increase"}]}/>
         </VictoryChart>
     );
 }
