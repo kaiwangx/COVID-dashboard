@@ -3,6 +3,7 @@ import { Text, View } from 'react-native'
 import useData from '../functions/useData.js'
 import { covidCasesByState } from '../functions/dataCollection.js'
 import DALineGraph from './DoubleAxisLineGraph.js';
+import { TitleCard, InfoCard } from '../component/InfoCards'
 
 export default function StateInfo(props) {
     const { state, styles, numDays } = props;
@@ -26,9 +27,18 @@ export default function StateInfo(props) {
     const datasets = [positiveIncData, negativeIncData];
 
     return (
+<<<<<<< HEAD
         <View style={styles.separator}>
             <Text style={{ textAlign: 'center', fontSize: 28 }}> Info for {state} </Text>
             <DALineGraph data={datasets} title={"Cases over the Last " + numDays + " Days"} />
         </View>
+=======
+        <>
+            <TitleCard> State: {state} </TitleCard>
+            <InfoCard title={"Positive Cases vs. Death"}>
+                <DALineGraph data={datasets} />
+            </InfoCard>
+        </>
+>>>>>>> c6f22883381e909cd5f9c952a08eb99121a59f48
     );
 }
