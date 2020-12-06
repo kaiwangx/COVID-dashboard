@@ -47,11 +47,20 @@ export const TitleCard = ( props ) => {
   )
 }
 
-export const InfoCard = ( props ) => {
-  return(
-    <Card containerStyle={infoCardStyles.card}>
-      <Card.Title style={infoCardStyles.title}>{props.title}</Card.Title>
-      {props.children}
-    </Card>
-  )
+export const InfoCard = {
+  Sub : ( props ) => {
+    return (
+      <>
+        <Card.Title style={infoCardStyles.title}>{props.title}</Card.Title>
+        {props.children}
+      </>
+    )
+  },
+  Main : ( props ) => {
+    return (
+      <Card containerStyle={infoCardStyles.card}>
+        {props.children.join(<Card.Divider/>)}
+      </Card>
+    )
+  }
 }
