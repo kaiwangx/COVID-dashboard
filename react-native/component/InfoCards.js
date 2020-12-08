@@ -39,6 +39,14 @@ const titleCardStyles = {
   }
 }
 
+const dividerStyles = {
+  height: 2,
+  backgroundColor: '#b5b5b5',
+  width: '95%',
+  marginLeft: 'auto',
+  marginRight: 'auto'
+}
+
 export const TitleCard = ( props ) => {
   return (
     <Card containerStyle={titleCardStyles.card}>
@@ -47,19 +55,25 @@ export const TitleCard = ( props ) => {
   )
 }
 
+const autoKey = ( i ) => ( ++i );
+
 export const InfoCard = {
   Sub : ( props ) => {
     return (
       <>
-        <Card.Title style={infoCardStyles.title}>{props.title}</Card.Title>
+        <Card.Title key={props.title} style={infoCardStyles.title}>{props.title}</Card.Title>
         {props.children}
       </>
     )
   },
   Main : ( props ) => {
+
+    let key = 0;
+
     return (
       <Card containerStyle={infoCardStyles.card}>
-        {props.children.join(<Card.Divider/>)}
+        {props.children
+        .reduce((accu, elem) => [accu, <Card.Divider key={autoKey(key)} style={dividerStyles} />, elem])} 
       </Card>
     )
   }

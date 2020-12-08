@@ -1,4 +1,46 @@
 /**
+ * Converts the received data and turns it into a set of weight points to go on the map
+ * 
+ * @param {*} data - The data retrieved from the API
+ * @param {*} province - The State/Province Short Long form
+ * @param {*} metric - The metric to use i.e. deaths, confirmed, recovered
+ */
+export function createMapPointsCountyByState( data, province, metric ){
+
+  // Initialize key variables
+  let provinceData = [];
+  let provinceMetricTotal = 0;
+
+  // Get all the information from the data
+  for( let i = 0; i < data.length; i++ ){
+    if( data[i]['province'] == province ){
+
+      // Create the point
+      let countyData = {};
+      countyData['metric'] = data[i]['stats'][metric];
+      countyData['latitude'] = Number(data[i]['coordinates']['latitude']);
+      countyData['longitude'] = Number(data[i]['coordinates']['longitude']);
+
+      // Add to the total
+      provinceMetricTotal += data[i]['stats'][metric];
+
+      // Add the new point
+      provinceData.push(countyData)
+    }
+  }
+
+  // Calculate the weights
+  for( let i = 0; i < provinceData.length; i++ ){
+    provinceData[i]['weight'] = provinceData[i]['metric'] / provinceMetricTotal;
+    delete provinceData[i]['metric']
+  }
+
+  return provinceData;
+}
+
+
+
+/**
  * Adds Rate of Change to data
  * 
  * Works from the start setting each days ROC value to equal 

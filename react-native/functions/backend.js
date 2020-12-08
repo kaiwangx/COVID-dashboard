@@ -47,7 +47,7 @@ async function loginWithPassword(username, password, navigation = null, dest) {
 
 async function getCurrentUser() {
   var userLocations = await Parse.User.currentAsync()
-  // console.log('current userLocations: ' + userLocations.get('username'))
+  console.log(userLocations)
   return userLocations
 }
 
@@ -116,8 +116,19 @@ async function getUserLocations(){
   query.select("latitude", "longitude");
 
   const userLocationData = await query.find();
-  
-  return userLocationData;
+
+  const userLocationDataClean = userLocationData.map((parseData) =>{
+    let data = parseData.toJSON()
+    
+    data['weight'] =  1 / userLocationData.length;
+
+    delete data['objectId'];
+    delete data['createdAt'];
+    delete data['updatedAt'];
+    return data;
+  })
+
+  return userLocationDataClean;
 }
 
 export { register, loginWithPassword, getCurrentUser, loginWithToken, logout, saveUsersLocations, getUserLocations }
