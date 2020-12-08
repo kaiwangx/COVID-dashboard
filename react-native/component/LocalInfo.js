@@ -34,15 +34,17 @@ export default function LocalInfo(props) {
     return (
         <>
             <TitleCard>Local: {zipcode}</TitleCard>
-            <InfoCard title={"Deaths this Week:"}>
-                <Statistic
-                    data={deathData[deathData.length - 1].y - deathData[0].y}
-                    style={styles.container}
-                />
-            </InfoCard>
-            <InfoCard title={"Positive Cases Increase"}>
-                <BarChart data={positiveChangeData} styles={styles}/>
-            </InfoCard>
+            <InfoCard.Main>
+                <InfoCard.Sub title={"Deaths this Week:"}>
+                    <Statistic
+                        data={deathData[deathData.length - 1].y - deathData[0].y}
+                        style={styles.container}
+                    />
+                </InfoCard.Sub>
+                <InfoCard.Sub title={"Positive Cases Increase"}>
+                    <BarChart data={positiveChangeData} styles={styles}/>
+                </InfoCard.Sub>
+            </InfoCard.Main>
         </>
     );
 }

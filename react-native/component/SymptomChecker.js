@@ -258,7 +258,7 @@ export default function SymptomChecker(props) {
   }
 
   function Result() {
-    // console.log(result)
+    console.log(result)
     return result ? (
       <View style={styles.container}>
         <View style={styles.title}>

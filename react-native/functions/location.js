@@ -29,160 +29,160 @@ function _getState(zipString) {
 
   /* Code cases alphabetized by state */
   if (zipcode >= 35000 && zipcode <= 36999) {
-      st = 'AL';
+      st = 'al';
       state = 'Alabama';
   } else if (zipcode >= 99500 && zipcode <= 99999) {
-      st = 'AK';
+      st = 'ak';
       state = 'Alaska';
   } else if (zipcode >= 85000 && zipcode <= 86999) {
-      st = 'AZ';
+      st = 'az';
       state = 'Arizona';
   } else if (zipcode >= 71600 && zipcode <= 72999) {
-      st = 'AR';
+      st = 'ar';
       state = 'Arkansas';
   } else if (zipcode >= 90000 && zipcode <= 96699) {
-      st = 'CA';
+      st = 'ca';
       state = 'California';
   } else if (zipcode >= 80000 && zipcode <= 81999) {
-      st = 'CO';
+      st = 'co';
       state = 'Colorado';
   } else if (zipcode >= 6000 && zipcode <= 6999) {
-      st = 'CT';
+      st = 'ct';
       state = 'Connecticut';
   } else if (zipcode >= 19700 && zipcode <= 19999) {
-      st = 'DE';
+      st = 'de';
       state = 'Delaware';
   } else if (zipcode >= 32000 && zipcode <= 34999) {
-      st = 'FL';
+      st = 'fl';
       state = 'Florida';
   } else if (zipcode >= 30000 && zipcode <= 31999) {
-      st = 'GA';
+      st = 'ga';
       state = 'Georgia';
   } else if (zipcode >= 96700 && zipcode <= 96999) {
-      st = 'HI';
+      st = 'hi';
       state = 'Hawaii';
   } else if (zipcode >= 83200 && zipcode <= 83999) {
-      st = 'ID';
+      st = 'id';
       state = 'Idaho';
   } else if (zipcode >= 60000 && zipcode <= 62999) {
-      st = 'IL';
+      st = 'il';
       state = 'Illinois';
   } else if (zipcode >= 46000 && zipcode <= 47999) {
-      st = 'IN';
+      st = 'in';
       state = 'Indiana';
   } else if (zipcode >= 50000 && zipcode <= 52999) {
-      st = 'IA';
+      st = 'ia';
       state = 'Iowa';
   } else if (zipcode >= 66000 && zipcode <= 67999) {
-      st = 'KS';
+      st = 'ks';
       state = 'Kansas';
   } else if (zipcode >= 40000 && zipcode <= 42999) {
-      st = 'KY';
+      st = 'ky';
       state = 'Kentucky';
   } else if (zipcode >= 70000 && zipcode <= 71599) {
-      st = 'LA';
+      st = 'la';
       state = 'Louisiana';
   } else if (zipcode >= 3900 && zipcode <= 4999) {
-      st = 'ME';
+      st = 'me';
       state = 'Maine';
   } else if (zipcode >= 20600 && zipcode <= 21999) {
-      st = 'MD';
+      st = 'md';
       state = 'Maryland';
   } else if (zipcode >= 1000 && zipcode <= 2799) {
-      st = 'MA';
+      st = 'ma';
       state = 'Massachusetts';
   } else if (zipcode >= 48000 && zipcode <= 49999) {
-      st = 'MI';
+      st = 'mi';
       state = 'Michigan';
   } else if (zipcode >= 55000 && zipcode <= 56999) {
-      st = 'MN';
+      st = 'mn';
       state = 'Minnesota';
   } else if (zipcode >= 38600 && zipcode <= 39999) {
-      st = 'MS';
+      st = 'ms';
       state = 'Mississippi';
   } else if (zipcode >= 63000 && zipcode <= 65999) {
-      st = 'MO';
+      st = 'mo';
       state = 'Missouri';
   } else if (zipcode >= 59000 && zipcode <= 59999) {
-      st = 'MT';
+      st = 'mt';
       state = 'Montana';
   } else if (zipcode >= 27000 && zipcode <= 28999) {
-      st = 'NC';
+      st = 'nc';
       state = 'North Carolina';
   } else if (zipcode >= 58000 && zipcode <= 58999) {
-      st = 'ND';
+      st = 'nd';
       state = 'North Dakota';
   } else if (zipcode >= 68000 && zipcode <= 69999) {
-      st = 'NE';
+      st = 'ne';
       state = 'Nebraska';
   } else if (zipcode >= 88900 && zipcode <= 89999) {
-      st = 'NV';
+      st = 'nv';
       state = 'Nevada';
   } else if (zipcode >= 3000 && zipcode <= 3899) {
-      st = 'NH';
+      st = 'nh';
       state = 'New Hampshire';
   } else if (zipcode >= 7000 && zipcode <= 8999) {
-      st = 'NJ';
+      st = 'nj';
       state = 'New Jersey';
   } else if (zipcode >= 87000 && zipcode <= 88499) {
-      st = 'NM';
+      st = 'nm';
       state = 'New Mexico';
   } else if (zipcode >= 10000 && zipcode <= 14999) {
-      st = 'NY';
+      st = 'ny';
       state = 'New York';
   } else if (zipcode >= 43000 && zipcode <= 45999) {
-      st = 'OH';
+      st = 'oh';
       state = 'Ohio';
   } else if (zipcode >= 73000 && zipcode <= 74999) {
-      st = 'OK';
+      st = 'ok';
       state = 'Oklahoma';
   } else if (zipcode >= 97000 && zipcode <= 97999) {
-      st = 'OR';
+      st = 'or';
       state = 'Oregon';
   } else if (zipcode >= 15000 && zipcode <= 19699) {
-      st = 'PA';
+      st = 'pa';
       state = 'Pennsylvania';
   } else if (zipcode >= 300 && zipcode <= 999) {
-      st = 'PR';
+      st = 'pr';
       state = 'Puerto Rico';
   } else if (zipcode >= 2800 && zipcode <= 2999) {
-      st = 'RI';
+      st = 'ri';
       state = 'Rhode Island';
   } else if (zipcode >= 29000 && zipcode <= 29999) {
-      st = 'SC';
+      st = 'sc';
       state = 'South Carolina';
   } else if (zipcode >= 57000 && zipcode <= 57999) {
-      st = 'SD';
+      st = 'sd';
       state = 'South Dakota';
   } else if (zipcode >= 37000 && zipcode <= 38599) {
-      st = 'TN';
+      st = 'tn';
       state = 'Tennessee';
   } else if ( (zipcode >= 75000 && zipcode <= 79999) || (zipcode >= 88500 && zipcode <= 88599) ) {
-      st = 'TX';
+      st = 'tx';
       state = 'Texas';
   } else if (zipcode >= 84000 && zipcode <= 84999) {
-      st = 'UT';
+      st = 'ut';
       state = 'Utah';
   } else if (zipcode >= 5000 && zipcode <= 5999) {
-      st = 'VT';
+      st = 'vt';
       state = 'Vermont';
   } else if (zipcode >= 22000 && zipcode <= 24699) {
-      st = 'VA';
+      st = 'va';
       state = 'Virgina';
   } else if (zipcode >= 20000 && zipcode <= 20599) {
-      st = 'DC';
+      st = 'dc';
       state = 'Washington DC';
   } else if (zipcode >= 98000 && zipcode <= 99499) {
-      st = 'WA';
+      st = 'wa';
       state = 'Washington';
   } else if (zipcode >= 24700 && zipcode <= 26999) {
-      st = 'WV';
+      st = 'wv';
       state = 'West Virginia';
   } else if (zipcode >= 53000 && zipcode <= 54999) {
-      st = 'WI';
+      st = 'wi';
       state = 'Wisconsin';
   } else if (zipcode >= 82000 && zipcode <= 83199) {
-      st = 'WY';
+      st = 'wy';
       state = 'Wyoming';
   } else {
       st = 'none';

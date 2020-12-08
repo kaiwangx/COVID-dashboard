@@ -1,31 +1,87 @@
 import { PROVIDER_GOOGLE, Heatmap } from 'react-native-maps'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MapView from 'react-native-maps'
 import { StyleSheet, View, Dimensions } from 'react-native'
+import { getUserLocations } from '../functions/backend';
+import { countyCovidCasesByState } from '../functions/dataCollection';
+import { createMapPointsCountyByState } from '../functions/dataManipulation';
 
 export default function MapScreen() {
+
+  // Create the states
+  const [localPoints, setLocalPoints] = useState([]);
+  const [stateByCountyPoints, setStateByCountyPoints] = useState([]);
+  const [points, setPoints] = useState([]);
+
+  useEffect(() => {
+    
+    async function getPoints(){
+
+      // Get Local Data
+      setLocalPoints(await getUserLocations());
+
+      // Get state data
+      const countyByStateData = await countyCovidCasesByState();
+      const countyByStatePoints = createMapPointsCountyByState(
+                                                                countyByStateData,
+                                                                'Wisconsin',
+                                                                'confirmed'
+                                                              );
+      setStateByCountyPoints(countyByStatePoints);
+
+    }
+
+    getPoints();
+    
+  }, [])
+
+  let map = {};
+
+  async function updateZoom(){
+
+    let camera = await map.getCamera();
+  
+    if( camera.zoom < 10 ){
+      setPoints(stateByCountyPoints);
+    } else {
+      setPoints(localPoints);
+    }
+  }
+
   return (
     <View style={styles.container}> 
       <MapView  
         showsUserLocation = {true}
         style={styles.mapStyle} 
         provider= {PROVIDER_GOOGLE}
-        region={{
+        initialRegion={{
           latitude: 43.073051,
           longitude: -89.401230, // madison location 
           latitudeDelta: 0.09,
           longitudeDelta: 0.0121
         }}
+        ref={ref => {
+          map = ref;
+        }}
+        onRegionChangeComplete={() => {
+          updateZoom( map ) ;
+        }}
         >
 
-        <MapView.Heatmap 
+        { 
+          points.length != 0 && <MapView.Heatmap 
           points={points}
           opacity={1}
           radius={50}
-          maxIntensity={100}
+          gradient={{
+            colors: ['#fc6f56', '#ff4524', '#ff4524'],
+            startPoints: [.25, .5, .75]
+          }}
+          maxIntensity={1000}
           gradientSmoothing={10}
           heatmapMode={"POINTS_DENSITY"}
           />
+        }  
         </MapView>
       </View>
     );
@@ -46,7 +102,7 @@ const styles = StyleSheet.create({
 });
 
 
-let points = [{latitude: 43.073540, longitude: -89.396820, weight: 1},
+let pointTemplate = [{latitude: 43.073540, longitude: -89.396820, weight: 1},
   {latitude: 43.073540, longitude: -89.396820, weight: 1},
   {latitude: 43.073540, longitude: -89.396820, weight: 1},
   {latitude: 43.073540, longitude: -89.396820, weight: 1},
