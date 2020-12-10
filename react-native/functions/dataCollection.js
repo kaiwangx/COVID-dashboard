@@ -184,5 +184,3 @@ export async function countyCovidCasesByState() {
   // Return requested amount of days worth of data
   return data;
 }
-
-
