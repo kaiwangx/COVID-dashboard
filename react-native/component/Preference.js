@@ -12,9 +12,11 @@ import { useNavigation } from '@react-navigation/native'
 import { Switch } from 'react-native-paper'
 import { ListItem, Icon, Avatar, Divider, Header } from 'react-native-elements'
 import Foundation from 'react-native-vector-icons/Foundation'
+import { setDailyNotification } from '../functions/notification'
 
 export default function Preference(props) {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
+  const [notificationsActive, setNotificationActivity] = useState(false);
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn)
 
@@ -26,6 +28,14 @@ export default function Preference(props) {
 
   function _setDefaultLocation() {
     alert('defaultLocation')
+  }
+
+  function _toggleNotification() {
+    
+    setDailyNotification( notificationsActive == false );
+
+    // Toggle the value
+    setNotificationActivity( notificationsActive == false )
   }
 
   const setting_list = [
@@ -41,6 +51,17 @@ export default function Preference(props) {
       ),
     },
     {
+      title: 'Daily Notifications',
+      icon: <Icon name="notifications" type="materialIcons" />,
+      rightContent: (
+        <Switch
+          style={styles.switch}
+          value={notificationsActive}
+          onValueChange={( o ) => _toggleNotification( o )}
+        />
+      ),
+    },
+    {
       title: 'Default Location',
       icon: <Icon name="location-city" type="materialIcons" />,
       rightContent: <Text style={{ fontSize: 15, marginRight: 5 }}>WI</Text>,
@@ -52,7 +73,7 @@ export default function Preference(props) {
     },
   ]
 
-  const functionList = [nothing, _setDefaultLocation, _setStyle]
+  const functionList = [nothing, _toggleNotification, _setDefaultLocation, _setStyle]
 
   return (
     <View style={styles.container}>

@@ -47,21 +47,32 @@ const NotificationLink = ( props ) => {
   );
 }
 
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
+function schedulePushNotification() {
+
+  Notifications.scheduleNotificationAsync({
     content: {
       title: "COVID update ready",
       body: 'You daily COVID report is ready',
     },
-    trigger: { seconds: 5 },
+    trigger: {
+      hour: 9,
+      minute: 0,
+      repeats: true
+    },
   });
 }
 
 async function registerForPushNotificationsAsync() {
+
   let token;
-  if (Constants.isDevice) {
+
+  if ( Constants.isDevice ) {
+
     const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+
     let finalStatus = existingStatus;
+
+    // If 
     if (existingStatus !== 'granted') {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       finalStatus = status;
@@ -86,6 +97,32 @@ async function registerForPushNotificationsAsync() {
   }
 
   return token;
+}
+
+export async function setDailyNotification( active ){
+
+  const currentNotifications =  await Notifications.getAllScheduledNotificationsAsync();
+
+  // If we want notifications and none are present
+  if( active && currentNotifications == 0 ){
+
+    schedulePushNotification();
+  
+  // Remove all notifications
+  } else if( !active ) {
+
+    Notifications.cancelAllScheduledNotificationsAsync();
+  }
+}
+
+export async function isNotificationsActive(){
+  const currentNotifications =  await Notifications.getAllScheduledNotificationsAsync();
+
+  if( currentNotifications.length == 0 ){
+    return false;
+  } else {
+    return true;   
+  }
 }
 
 export default NotificationLink;
