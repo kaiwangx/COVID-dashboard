@@ -38,9 +38,9 @@ export default function MapScreen() {
   let map = {};
 
   async function updateZoom(){
-
+    
     let camera = await map.getCamera();
-  
+
     if( camera.zoom < 10 ){
       setPoints(stateByCountyPoints);
     } else {
@@ -67,15 +67,15 @@ export default function MapScreen() {
           updateZoom( map ) ;
         }}
         >
-
         { 
           points.length != 0 && <MapView.Heatmap 
           points={points}
           opacity={1}
-          radius={50}
+          radius={100}
           gradient={{
-            colors: ['#fc6f56', '#ff4524', '#ff4524'],
-            startPoints: [.25, .5, .75]
+            colors: ['#fcc7bd', '#ff8e7a', '#fc6f56', '#ff4524', '#ff4524'],
+            startPoints: [.01, .1, .25, .5, .75],
+            colorMapSize: 100
           }}
           maxIntensity={1000}
           gradientSmoothing={10}
