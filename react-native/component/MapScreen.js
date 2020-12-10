@@ -12,6 +12,7 @@ export default function MapScreen() {
   const [localPoints, setLocalPoints] = useState([]);
   const [stateByCountyPoints, setStateByCountyPoints] = useState([]);
   const [points, setPoints] = useState([]);
+  const [radius, setRadius] = useState(20);
 
   useEffect(() => {
     
@@ -42,8 +43,10 @@ export default function MapScreen() {
     let camera = await map.getCamera();
 
     if( camera.zoom < 10 ){
+      setRadius(100)
       setPoints(stateByCountyPoints);
     } else {
+      setRadius(30)
       setPoints(localPoints);
     }
   }
@@ -71,7 +74,7 @@ export default function MapScreen() {
           points.length != 0 && <MapView.Heatmap 
           points={points}
           opacity={.8}
-          radius={100}
+          radius={radius}
           gradient={{
             colors: ['#ffdcd6', '#ff8e7a', '#fc6f56', '#ff4524', '#ff2f0a'],
             startPoints: [.01, .1, .25, .5, .75],
