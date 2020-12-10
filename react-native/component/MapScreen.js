@@ -70,10 +70,10 @@ export default function MapScreen() {
         { 
           points.length != 0 && <MapView.Heatmap 
           points={points}
-          opacity={1}
+          opacity={.8}
           radius={100}
           gradient={{
-            colors: ['#fcc7bd', '#ff8e7a', '#fc6f56', '#ff4524', '#ff4524'],
+            colors: ['#ffdcd6', '#ff8e7a', '#fc6f56', '#ff4524', '#ff2f0a'],
             startPoints: [.01, .1, .25, .5, .75],
             colorMapSize: 100
           }}
