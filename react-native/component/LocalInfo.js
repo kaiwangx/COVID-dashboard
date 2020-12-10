@@ -6,11 +6,12 @@ import { covidCasesByZipcode } from '../functions/dataCollection.js'
 import { TitleCard, InfoCard } from '../component/InfoCards'
 import BarChart from './BarChart'
 import Statistic from './Statistic.js';
+import LineGraph from './LineGraph.js';
 
 export default function LocalInfo(props) {
     const { zipcode, styles, numDays } = props;
 
-    const data = useData(() => covidCasesByZipcode(zipcode, 7, true));
+    const data = useData(() => covidCasesByZipcode(zipcode, 7));
     if (!data) {
         return (
             <View style={styles.loading}>
@@ -24,7 +25,9 @@ export default function LocalInfo(props) {
         slice(Math.max(data.length - numDays, 0), data.length);
 
     const deathData = cleanData.map(row => { return {"x": row.date, "y": row.deathCt} });
+
     const positiveData = cleanData.map(row => { return {"x": row.date, "y": row.positiveCt} });
+
     const positiveChangeData = []
     for (let i = 1; i < positiveData.length; i++) {
         positiveChangeData.push(
@@ -34,15 +37,26 @@ export default function LocalInfo(props) {
     return (
         <>
             <TitleCard>Local: {zipcode}</TitleCard>
-            <InfoCard title={"Deaths this Week:"}>
-                <Statistic
-                    data={deathData[deathData.length - 1].y - deathData[0].y}
-                    style={styles.container}
-                />
-            </InfoCard>
-            <InfoCard title={"Positive Cases Increase"}>
-                <BarChart data={positiveChangeData} styles={styles}/>
-            </InfoCard>
+            <InfoCard.Main>
+                <InfoCard.Sub title={"Deaths this Week:"}>
+                    <Statistic
+                        data={deathData[deathData.length - 1].y - deathData[0].y}
+                        style={styles.container}
+                    />
+                </InfoCard.Sub>
+                <InfoCard.Sub title={"Positive Cases Increase"}>
+                    <BarChart data={positiveChangeData} styles={styles}/>
+                </InfoCard.Sub>
+                <InfoCard.Sub title={"Total Counts:"}>
+                    <LineGraph
+                        data={data}
+                        x={'date'}
+                        yTitles={['Positive Cases', 'Death']}
+                        yKeys={['positiveCt', 'deathCt']}
+                        colors={['#ff6347', '#000000']}
+                    />
+                </InfoCard.Sub>
+            </InfoCard.Main>
         </>
     );
 }

@@ -20,7 +20,9 @@ function register(username, password, navigation = null, dest) {
   userLocations
     .signUp()
     .then(function (userLocations) {
-      alert('User created successful with name: ' + userLocations.get('username'))
+      alert(
+        'User created successful with name: ' + userLocations.get('username')
+      )
       if (navigation) {
         navigation.navigate(dest)
       }
@@ -34,7 +36,9 @@ function register(username, password, navigation = null, dest) {
 async function loginWithPassword(username, password, navigation = null, dest) {
   await Parse.User.logIn(username, password)
     .then(function (userLocations) {
-      alert('User sign in successful with name: ' + userLocations.get('username'))
+      alert(
+        'User sign in successful with name: ' + userLocations.get('username')
+      )
       if (navigation) {
         navigation.navigate(dest)
       }
@@ -47,7 +51,7 @@ async function loginWithPassword(username, password, navigation = null, dest) {
 
 async function getCurrentUser() {
   var userLocations = await Parse.User.currentAsync()
-  // console.log('current userLocations: ' + userLocations.get('username'))
+  // console.log(userLocations)
   return userLocations
 }
 
@@ -71,53 +75,66 @@ function logout() {
   Parse.User.logOut()
 }
 
-async function saveUsersLocations(){ 
+async function saveUsersLocations() {
+  const userLocationsStrings = await retrieveData('LocationData')
 
-  const userLocationsStrings = await retrieveData('LocationData');
-  
-  if( userLocationsStrings != undefined ){
-
-    const currDate = new Date().setHours(0,0,0,0);
-    const userLocations = JSON.parse(userLocationsStrings);
-    const dateKeys = Object.keys(userLocations);
-    const UserLocation = Parse.Object.extend("UserLocation");
+  if (userLocationsStrings != undefined) {
+    const currDate = new Date().setHours(0, 0, 0, 0)
+    const userLocations = JSON.parse(userLocationsStrings)
+    const dateKeys = Object.keys(userLocations)
+    const UserLocation = Parse.Object.extend('UserLocation')
 
     // Iterate all stored days
-    dateKeys.forEach( key => {
-
+    dateKeys.forEach((key) => {
       // Iterate all locations in that day
-      userLocations[key].forEach( savedLocation => {
-
+      userLocations[key].forEach((savedLocation) => {
         // Create and store location object
-        let userLocation = new UserLocation();
-        userLocation.set('longitude', savedLocation.coords['longitude']);
-        userLocation.set('latitude', savedLocation.coords['latitude']);
-        userLocation.set('timestamp', currDate);
-        userLocation.save();
+        let userLocation = new UserLocation()
+        userLocation.set('longitude', savedLocation.coords['longitude'])
+        userLocation.set('latitude', savedLocation.coords['latitude'])
+        userLocation.set('timestamp', currDate)
+        userLocation.save()
       })
     })
 
     removeData('LocationData')
-  } 
-
-
-} 
-
-async function getUserLocations(){
-  const UserLocation = Parse.Object.extend("UserLocation");
-  const query = new Parse.Query(UserLocation);
-
-  // Get all possible infection dates
-  const currDate = new Date().setHours(0,0,0,0);
-  const beginningOfInfectivity = currDate - 12096e5;
-  query.greaterThanOrEqualTo('timestamp', beginningOfInfectivity);
-
-  // Select only longitude and latitude
-  query.select("latitude", "longitude");
-
-  const userLocationData = await query.find();
-  
-  return userLocationData;
+  }
 }
 
-export { register, loginWithPassword, getCurrentUser, loginWithToken, logout, saveUsersLocations, getUserLocations }
+async function getUserLocations() {
+  const UserLocation = Parse.Object.extend('UserLocation')
+  const query = new Parse.Query(UserLocation)
+
+  // Get all possible infection dates
+  const currDate = new Date().setHours(0, 0, 0, 0)
+  const beginningOfInfectivity = currDate - 12096e5
+  query.greaterThanOrEqualTo('timestamp', beginningOfInfectivity)
+
+  // Select only longitude and latitude
+  query.select('latitude', 'longitude')
+
+  const userLocationData = await query.find()
+
+  const userLocationDataClean = userLocationData.map((parseData) => {
+    let data = parseData.toJSON()
+
+    data['weight'] = 1 / userLocationData.length
+
+    delete data['objectId']
+    delete data['createdAt']
+    delete data['updatedAt']
+    return data
+  })
+
+  return userLocationDataClean
+}
+
+export {
+  register,
+  loginWithPassword,
+  getCurrentUser,
+  loginWithToken,
+  logout,
+  saveUsersLocations,
+  getUserLocations,
+}

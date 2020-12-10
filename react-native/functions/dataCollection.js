@@ -78,6 +78,27 @@ async function _refreshStateData( state ){
   }
 }
 
+async function _refreshCountyByStateData(){
+  try {
+    /// Get new information
+    const response = await fetch(
+      'https://disease.sh/v3/covid-19/jhucsse/counties'
+    )
+    const data = await response.json();
+
+    /// Update cache
+    const currentDate = new Date().setHours(0,0,0,0);
+    let updatedJSON = {};
+    updatedJSON['lastUpdated'] = currentDate;
+    updatedJSON['data'] = data;
+    storeData("CountyCovidCasesByState", JSON.stringify(updatedJSON));
+
+    return data
+  } catch ( error ) {
+    console.error( error );
+  }
+}
+
 /**
  * 
  * @param {String} key - The key to the async storage location 
@@ -98,7 +119,7 @@ async function _getAsyncCovidData( key, location ){
   const currentDate = new Date().setHours(0,0,0,0);
   const lastUpdate = new Date(data['lastUpdated']).setHours(0,0,0,0);
 
-  if( currentDate == lastUpdate && location == data['location']){
+  if( currentDate == lastUpdate && location == data['location'] ){
     return data['data'];
   } else {
     return false;
@@ -146,4 +167,20 @@ export async function covidCasesByState(state, numberOfDays = 31) {
   return data.slice(0, numberOfDays);
 }
 
+/**
+ * Gets the local data for the day and caches the rest
+ * 
+ */
+export async function countyCovidCasesByState() {
 
+  // Get currently store data
+  let data = await _getAsyncCovidData('CountyCovidCasesByState');
+
+  // If the required data is not stored
+  if( !data ){
+    data = await _refreshCountyByStateData();
+  }
+  
+  // Return requested amount of days worth of data
+  return data;
+}

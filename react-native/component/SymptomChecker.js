@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 import RNMultiSelect, {
   IMultiSelectDataTypes,
@@ -17,9 +24,14 @@ export default function SymptomChecker(props) {
   })
   const [newQuestionStartIndex, setNewQuestionStartIndex] = useState(0)
   const [result, updateResult] = useState(null)
+  const [patientStack, setPatientStack] = useState([])
+  const [responseStack, setResponseStack] = useState([])
+  const [questionIndexStack, setQuestionIndexStack] = useState([])
 
-  console.log(patient)
-  // console.log(response)
+  // console.log(patientStack)
+
+  // console.log(patient)
+  console.log(response)
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
@@ -31,6 +43,8 @@ export default function SymptomChecker(props) {
       const question = response['question']
       var newEvidence = patient['evidence']
       setNewQuestionStartIndex(newEvidence.length)
+      setQuestionIndexStack(questionIndexStack.concat(newEvidence.length))
+      setResponseStack(responseStack.concat(response))
       if (question['type'] == 'group_single') {
         newEvidence.push({
           id: question['items'][0]['id'],
@@ -60,6 +74,8 @@ export default function SymptomChecker(props) {
   }
 
   function diagnosis(obj) {
+    var newPatientStack = patientStack.concat(JSON.parse(JSON.stringify(obj)))
+    setPatientStack(newPatientStack)
     fetch('https://api.infermedica.com/covid19/diagnosis', {
       method: 'POST',
       headers: {
@@ -95,6 +111,24 @@ export default function SymptomChecker(props) {
         // setLoading(true)
         updateResult(data)
       })
+  }
+
+  function goBack() {
+    var newPatientStack = [...patientStack]
+    var newQuestionIndexStack = [...questionIndexStack]
+    var newResponseStact = [...responseStack]
+    newQuestionIndexStack.pop()
+    newResponseStact.pop()
+    // console.log(newPatientStack.pop())
+
+    // setQuestionIndexStack(
+    //   newQuestionIndexStack[newQuestionIndexStack.length - 1]
+    // )
+
+    // setPatient(newPatientStack.pop())
+    // setPatientStack(newPatientStack)
+    // setResponseStack(newResponseStact)
+    // setQuestionIndexStack(newQuestionIndexStack)
   }
 
   function SetAgeAndGender() {
@@ -160,26 +194,56 @@ export default function SymptomChecker(props) {
     )
   }
 
-  function StartOverButton() {
+  function BackButton() {
     return (
       <View style={styles.loginButton}>
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonTitle}
-          title="Start over"
-          onPress={() => reset()}
+          title="Back"
+          onPress={() => goBack()}
         />
       </View>
+    )
+  }
+
+  function StartOverButton() {
+    return (
+      // <View style={styles.loginButton}>
+      //   <Button
+      //     buttonStyle={styles.button}
+      //     titleStyle={styles.buttonTitle}
+      //     title="Start over"
+      //     onPress={() => reset()}
+      //   />
+      // </View>
+      <TouchableOpacity
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 20,
+        }}
+        onPress={() => reset()}
+      >
+        <Icon
+          name="close-circle-outline"
+          type="material-community"
+          color="#fcc9c0"
+        />
+      </TouchableOpacity>
     )
   }
 
   function GroupedSingleQuestion(props) {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.title}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        >
+          <View style={[styles.title, { marginTop: 40, marginBottom: 40 }]}>
             <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-              Choose one of the following
+              {props.question['text']}
             </Text>
           </View>
           <View style={{ marginLeft: 20 }}>
@@ -202,9 +266,10 @@ export default function SymptomChecker(props) {
               ))}
             </Picker>
           </View>
-          <NextButton />
-          <StartOverButton />
+          {/* <BackButton /> */}
         </ScrollView>
+        <NextButton />
+        <StartOverButton />
       </View>
     )
   }
@@ -214,8 +279,11 @@ export default function SymptomChecker(props) {
     // console.log(patient.evidence)
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.title}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        >
+          <View style={[styles.title, { marginTop: 40, marginBottom: 40 }]}>
             <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               {props.question['text']}
             </Text>
@@ -250,9 +318,10 @@ export default function SymptomChecker(props) {
               </View>
             </View>
           ))}
-          <NextButton />
-          <StartOverButton />
+          {/* <BackButton /> */}
         </ScrollView>
+        <NextButton />
+        <StartOverButton />
       </View>
     )
   }
@@ -261,14 +330,20 @@ export default function SymptomChecker(props) {
     // console.log(result)
     return result ? (
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            {result['label']}
-          </Text>
-        </View>
-        <View style={styles.text}>
-          <Text>{result['description']}</Text>
-        </View>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        >
+          <View style={styles.title}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+              {result['label']}
+            </Text>
+          </View>
+          <View style={styles.text}>
+            <Text>{result['description']}</Text>
+          </View>
+        </ScrollView>
+
         <StartOverButton />
       </View>
     ) : (

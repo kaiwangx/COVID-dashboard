@@ -38,12 +38,23 @@ export default function StateInfo(props) {
     return (
         <>
             <TitleCard> State: {state} </TitleCard>
+<<<<<<< HEAD
             <InfoCard title={"Weekly Positive Cases:"}>
                 <Statistic data={statisticPercentage}/>
             </InfoCard>
             <InfoCard title={"COVID-19 Test Results"}>
                 <DALineGraph data={datasets} />
             </InfoCard>
+=======
+            <InfoCard.Main>
+                <InfoCard.Sub title={"Weekly Positive Cases:"}>
+                    <Statistic data={statisticPercentage}/>
+                </InfoCard.Sub>
+                <InfoCard.Sub title={"Positive Cases vs. Death"}>
+                    <DALineGraph data={datasets} />
+                </InfoCard.Sub>
+            </InfoCard.Main>
+>>>>>>> 798f510e22a693da6ac44cd8b96026ad72c3e5b9
         </>
     );
 }
