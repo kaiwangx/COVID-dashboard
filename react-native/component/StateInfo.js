@@ -41,7 +41,7 @@ export default function StateInfo(props) {
             <InfoCard title={"Weekly Positive Cases:"}>
                 <Statistic data={statisticPercentage}/>
             </InfoCard>
-            <InfoCard title={"Positive Cases vs. Death"}>
+            <InfoCard title={"COVID-19 Test Results"}>
                 <DALineGraph data={datasets} />
             </InfoCard>
         </>

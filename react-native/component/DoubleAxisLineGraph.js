@@ -53,7 +53,7 @@ export default function DALineGraph(props){
                     ))}
                 </VictoryGroup>
             <VictoryLegend x={230} colorScale={["red", "gray"]} 
-                data={[{name: "+ Increase"}, {name: "- Increase"}]}/>
+                data={[{name: "+ Test Cases"}, {name: "- Test Cases"}]}/>
         </VictoryChart>
     );
 }
