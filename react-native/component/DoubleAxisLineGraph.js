@@ -39,7 +39,7 @@ export default function DALineGraph(props){
                         // Use normalized tickValues (0 - 1)
                         tickValues={[0, 0.25, 0.5, 0.75, 1]}
                         // Re-scale ticks by multiplying by correct maxima
-                        tickFormat={(t) => (t * maxima[i] / 1000).toPrecision(2) + "k"}
+                        tickFormat={(t) => (t * maxima[i] / 1000).toPrecision(3) + "k"}
                     />
                 ))}
                 <VictoryGroup offset={22} colorScale={colors}>
@@ -52,7 +52,7 @@ export default function DALineGraph(props){
                         />
                     ))}
                 </VictoryGroup>
-            <VictoryLegend x={230} colorScale={["red", "gray"]} 
+            <VictoryLegend x={220} colorScale={["red", "gray"]} 
                 data={[{name: "+ Test Cases"}, {name: "- Test Cases"}]}/>
         </VictoryChart>
     );

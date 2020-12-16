@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import LocalInfo from './LocalInfo'
 import StateInfo from './StateInfo.js'
+import { storeData, retrieveData } from "../functions/localStorage.js"
+import useData from '../functions/useData'
 
 const styles = StyleSheet.create({
     container: {
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
 export default function HomeScreen() {
     // props?
     // retrieve from async storage or backend?
+
     const state = "WI";
     const stateNumDays = 31;
     const zipcode = 53703;
@@ -39,7 +42,7 @@ export default function HomeScreen() {
         <>
             <ScrollView>
                 <LocalInfo zipcode={zipcode} styles={styles} numDays={localNumDays}/>
-                <StateInfo state={state} styles={styles} numDays={stateNumDays}/>
+                {state? <StateInfo state={state} styles={styles} numDays={stateNumDays} /> : null}
             </ScrollView>
         </>
     )
